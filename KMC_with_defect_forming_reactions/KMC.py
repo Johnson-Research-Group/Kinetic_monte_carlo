@@ -1303,17 +1303,17 @@ size = 20
 no_of_layers = 5
 
 #Constants
-k_b_ev = 8.6173 * 10**(-5) # Boltzmann's constant in units eV K^-1
-k_b = 1.3806*(10**(-23)) # Boltzmann's constant in units J/K
-h = 6.62607*(10**(-34)) # Planck's constant in units Js
-m_O = 2.657*(10**(-26)) # Mass of oxygen atom in units kg
-m_C = 1.99 * 10**(-26) # Mass of oxygen molecule in units kg
-A_eff = 2.6199 * (10**-20) # Effective area for oxygen adsorption in units m^2
+k_b_ev = 8.6173 * 10**(-5) # Boltzmann's constant [eV K^-1]
+k_b = 1.3806*(10**(-23)) # Boltzmann's constant [J/K]
+h = 6.62607*(10**(-34)) # Planck's constant [Js]
+m_O = 2.657*(10**(-26)) # Mass of oxygen atom [kg]
+m_C = 1.99 * 10**(-26) # Mass of oxygen molecule [kg]
+A_eff = 2.6199 * (10**-20) # Effective area for oxygen adsorption [m^2]
 
 #Parameters
 stick_coeff = 1 # Sticking coefficient of oxygen atoms for adsorption
-T_s = T_g = 1500 # Temperature of surface and gas in units K
-P_stag = 10000 # Pressure of gas mixture in units Pa
+T_s = T_g = 1500 # Temperature of surface and gas [K]
+P_stag = 10000 # Pressure of gas mixture [Pa]
 
 # Create cantera Solution object to represent a gas mixture gas1
 gas1 = ct.Solution('gri30.yaml')
@@ -2150,82 +2150,82 @@ while cat!=-1:
 			epoxy_make_ep_C(chosen)
 			flag_O_1[switch_O_ep] = 'ep'
 
-	elif cat == 7: #1-Ep to 2-Ep
+	elif cat == 7: # 1-ep to 2-ep
 		ep_diff_1_2(site_O)
 
-	elif cat == 8:#2-Ep to 3-Ep
+	elif cat == 8:# 2-ep to 3-ep
 		ep_diff_2_3(site_O)
 
-	elif cat == 9: #1-Ep to 4-Ep
+	elif cat == 9: # 1-ep to 4-ep
 		ep_diff_1_4(site_O)
 
-	elif cat == 10: #1-Ep to Epoxy-Ether
+	elif cat == 10: # 1-ep to epoxy-ether
 		pos1_to_Epoxy_Ether(site_O)
 
-	elif cat == 11: #epoxy-ether to 1-Ep
+	elif cat == 11: # epoxy-ether to 1-ep
 		Epoxy_Ether_to_pos1(site_O)
 
-	elif cat == 12: #epoxy-Ether to lactone-ether
+	elif cat == 12: # epoxy-ether to lactone-ether
 		Ep_Eth__Ep_Eth_Ep(site_O)
 
-	elif cat == 13: #lactone-Ether CO formation
+	elif cat == 13: # lactone-ether CO formation
 		la_eth_CO(site)
 
-	elif cat == 14: #ether-latone-ether CO formation
+	elif cat == 14: # ether-latone-ether CO formation
 		eth_la_eth_CO(site)
 
-	elif cat ==15: #lactone-ether CO2 formation
+	elif cat ==15: # lactone-ether CO2 formation
 		la_eth_CO2(site)
 
-	elif cat == 16:#ether-lactone-ether CO2 formation
+	elif cat == 16:# ether-lactone-ether CO2 formation
 		eth_la_eth_CO2(site)
 
-	elif cat == 17: #lactone CO formation at vacancy
+	elif cat == 17: # lactone CO formation at vacancy
 		la_vac_CO(site)
 
-	elif cat == 18: #lactone-epoxy CO formation at vacancy
+	elif cat == 18: # lactone-epoxy CO formation at vacancy
 		la_vac_epoxy_CO(site)
 
-	elif cat == 19: #lactone CO2 formation at vacancy
+	elif cat == 19: # lactone CO2 formation at vacancy
 		la_vac_CO2(site)
 
-	elif cat == 20: #lactone-epoxy CO2 formation at vacancy
+	elif cat == 20: # lactone-epoxy CO2 formation at vacancy
 		la_vac_epoxy_CO2(site)
 
 	elif cat == 21: # lactone-ether to ether-lactone-ether
 		la_eth_to_eth_la_eth(site)
 
-	if cat == 22 or cat == 23: #O2 zigzag & armchair Adsorption 
+	if cat == 22 or cat == 23: # O2 zigzag & armchair adsorption 
 		O2_edge_ad(site)
 
-	elif cat ==24 or cat == 25 or cat == 26: #O ZigZag Adsorption & O ArmChair Adsorption & O Carbonyl Adsorption
+	elif cat ==24 or cat == 25 or cat == 26: # O zigzag adsorption & O armchair adsorption & O carbonyl adsorption
 		O_edge_ad(site)
 
-	elif cat == 27: #O2 Split Diffusion ZZ1
+	elif cat == 27: # O2 split diffusion ZZ1
 		O2_split_diff_ZZ1(site)
 
-	elif cat == 28: #O2 Split Diffusion AC1
+	elif cat == 28: # O2 split diffusion AC1
 		O2_split_diff_AC1(site)
 
-	elif cat == 29: #O2 Split Diffusion AC2
+	elif cat == 29: # O2 split diffusion AC2
 		O2_split_diff_AC2(site)
 
-	elif cat == 30: #O2 Split Diffusion ZZ
+	elif cat == 30: # O2 split diffusion ZZ
 		O2_split_diff_ZZ2(site)
 		
-	elif cat == 31: #O2 Desorption ZZ
+	elif cat == 31: # O2 desorption ZZ
 		O2_des(site)
 
-	elif cat==32: #O2 Desorption AC
+	elif cat==32: # O2 desorption AC
 		O2_des(site)
 
-	elif cat==33: # No Epoxy ZZ CO formation
+	elif cat==33: # No epoxy ZZ CO formation
 		no_ep_ZZ_CO(site)
 
-	elif cat==34: # 1 Epoxy ZZ CO formation
+	elif cat==34: # 1 epoxy ZZ CO formation
 		one_ep_ZZ_CO(site)
 
-	elif cat==35: # 2 Epoxy ZZ CO formation
+	elif cat==35: # 2 epoxy ZZ CO formation
 		two_ep_ZZ_CO(site)
 
 	elif cat==36: # 1 carbonyl AC CO formation
@@ -2234,10 +2234,10 @@ while cat!=-1:
 	elif cat==37: # 2 carbonyl AC CO formation
 		two_AC_CO(site)
 
-	elif cat==38: # 1 carbonyl Epoxy AC CO formation
+	elif cat==38: # 1 carbonyl epoxy AC CO formation
 		one_AC_ep_CO(site)
 
-	elif cat==39: # 2 carbonyl Epoxy AC CO formation
+	elif cat==39: # 2 carbonyl epoxy AC CO formation
 		two_AC_ep_CO(site)
 
 	elif cat==40: # 1 carbonyl DZZ CO formation
@@ -2252,10 +2252,10 @@ while cat!=-1:
 	elif cat==43: # SBC CO formation
 		SBC_CO(site)
 
-	elif cat==44: # SBC Epoxy CO formation
+	elif cat==44: # SBC epoxy CO formation
 		SBC_ep_CO(site)
 
-	elif cat>=45 and cat<(36+45):
+	elif cat>=45 and cat<(36+45): # Island removal
 		for elem in chain:
 			Epoxy_Ad_C_delete(elem)
 			Lower_layer(elem)
@@ -2263,7 +2263,7 @@ while cat!=-1:
 	else: #ZigZag Scatter & Armchair Scatter & Carbonyl O Scatter
 		pass
 
-	#Cyclic Ethers
+	# Remove cyclic-ethers if part of island
 
 	for site in cyc_ethers:
 		attach_C = [p for p in near_neigh[site] if 'cyc-eth' in flag[p]]
@@ -2292,26 +2292,32 @@ while cat!=-1:
 		else:
 			pass
 
+	# --------------------------------------- Save simulation data -----------------------------------------------
 	if time_step%1000000==0:
+		# Save every 1000000 KMC iterations
 		df1_4 = pd.DataFrame([[flag, flag_O_1, flag_O_2, flag_O_3, t,time_step, int(offset_full)+(time.time() - start_time), changing_av_ad, changing_av_ep, site_O_before, site_before, sur_av_ad, sur_av_ep, edge_C, cat,prob,cov_C,cov_ep,counter_cat]])
 		df1_4.to_pickle("./Df_%dPa_%dK_%s_%d_%d.pkl"%(P_stag,T_g,str(size), no_of_layers, time_step))
 		print(" ========= KMC Iteration = %d ==========" %time_step)
 	
 	if cat==-1:
+		# Save at last iteration
 		df1_4 = pd.DataFrame([[flag, flag_O_1, flag_O_2, flag_O_3, t,time_step, int(offset_full)+(time.time() - start_time), changing_av_ad, changing_av_ep, site_O_before, site_before, sur_av_ad, sur_av_ep, edge_C, cat,prob,cov_C,cov_ep,counter_cat]])
 		df1_4.to_pickle("./Df_%dPa_%dK_%s_%d_%d.pkl"%(P_stag,T_g,str(size), no_of_layers, time_step))
 
 	if (time.time() - start_time)/3600 >69 and checker==0:
+		# Save after a certain amount of simulation time has passed
 		checker=1
 		df1_4 = pd.DataFrame([[flag, flag_O_1, flag_O_2, flag_O_3,t,time_step, int(offset_full)+(time.time() - start_time), changing_av_ad, changing_av_ep, site_O_before, site_before, sur_av_ad, sur_av_ep, edge_C, cat,prob,cov_C,cov_ep,counter_cat]])
 		df1_4.to_pickle("./Df_restart_%dPa_%dK_%s_%d_%d.pkl"%(P_stag,T_g,str(size), no_of_layers, time_step))
 
 	if R!=0:
+		# Update physical time
 		r1 = random.random()
 		t += -(np.log(r1))/(R*1.0)
 	else:
 		pass
 	
+	# ---------------------- Print computational time per iteration -----------------------------
 	#timestep_end = time.time()
 	#print("Time for timestep: %s seconds"%str(timestep_end -time1))
 	#print("Time Elapsed: %s mins"%str((time.time() - start_time)/60))
@@ -2319,8 +2325,12 @@ while cat!=-1:
 
 	time_step +=1
 
+# ---------------------- Print simulation data -----------------------------
 
-print("Number of Epoxies: %d" %flag_O_1.count('ep'))
 print(color.BOLD + color.DARKCYAN + "Real Time:" + color.END + " %s secs"%"{:.2e}".format(t))
 time_full = (time.time() - start_time)
 print(color.BOLD + color.DARKCYAN + "Simulation Time:" + color.END + " %.7f secs"%(int(offset_full)+time_full))
+print()
+print(" ========= Number of reaction occurences ========= ")
+for cat in range(len(Category)):
+	print(Category[cat]+": %d"%counter_cat[cat])
