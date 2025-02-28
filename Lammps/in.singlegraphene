@@ -1,0 +1,132 @@
+
+#-------------Variable Commands----------
+
+variable datfile index Test_923K.txt
+
+#-------------Units, Dimensions------------
+units	 real
+
+dimension 3
+
+newton on
+
+processors * * *
+
+boundary p p f
+
+atom_style charge
+
+atom_modify map yes
+
+#----------Create atoms---------------
+
+variable l equal 1.42
+variable s equal 3.4
+variable a1 equal 3*$l
+variable a2 equal (sqrt(3))*$l
+variable a3 equal $s*2
+
+variable a equal 1/6
+variable b equal 2/3
+variable c equal 1/3
+variable d equal 5/6
+
+lattice custom 1.0 a1 ${a1} 0.0 0.0 a2 0.0 ${a2} 0.0 a3 0.0 0.0 ${a3} &
+                    basis 0 0 0 basis $a 0.5 0 basis 0.5 0.5 0 basis $b 0 0 basis 0 0 0.5 basis $c 0 0.5 basis 0.5 0.5 0.5 basis $d 0.5 0.5
+
+variable b1 equal ${a1}*6*2-0.71
+variable b2 equal ${a2}*6*3
+variable b3 equal ${a3}
+variable b4 equal ${b3}*2
+variable ho equal 2*${b3}+15
+
+region mybox block -0.72 ${b1} 0.0 ${b2} -35.0 100.0 units box
+create_box 2 mybox 
+region C_domain_1 block -0.72 ${b1} 0.0 ${b2} 0 8 units box #8 for 3 layers 14 for 5 3 for 1 layer 4 for 2 layers
+create_atoms 1 region C_domain_1
+
+group carbon type 1
+group oxygen type 2
+
+dump graph all custom 25 coordinates.cfg id x y z 
+#--------------Mass and Velocity--------
+
+mass 1 12.0107
+mass 2 15.999
+
+#---------Neighbor----------------------
+
+neighbor    2 bin
+neigh_modify    every 1 delay 0 check yes
+
+#------------Timestep--------------------
+
+timestep 0.25 #femtoseconds
+
+#---------Pair Style & Coeff------------
+
+pair_style reax/c NULL #controlfile.txt #checkqeq no #controlfile.txt
+pair_coeff * * ffield.reax.cho C O
+
+#--------------Fix Commands-------------
+
+fix qeq_reax all qeq/reax 1 0.0 10.0 1.0e-6 reax/c
+
+#------------Energy minimization-----
+
+fix relax carbon box/relax x 0.0 y 0.0 couple none fixedpoint 0 0 0
+
+compute ctemp carbon temp
+compute peratom carbon pe/atom
+compute pe carbon reduce sum c_peratom
+compute otemp oxygen temp
+compute temp_com carbon temp/com # Temperature of all Carbon layers without center-of-mass velocity
+
+thermo_style custom step etotal c_pe c_otemp c_ctemp lx ly
+thermo_modify lost ignore
+thermo 100
+
+min_style cg
+min_modify line quadratic
+minimize 1.0e-30 1.0e-30 100000 1000000
+
+fix dynamics all nve
+
+#-------------------------Dump--------------------------
+
+
+variable xvar equal "x[25]"
+variable yvar equal "y[25]"
+variable zvar equal "z[25]"
+variable vxvar equal "vx[25]"
+variable vyvar equal "vy[25]"
+variable vzvar equal "vz[25]"
+
+velocity carbon create 923.0 35281345 mom yes rot yes dist uniform units box
+
+fix reaxc_bonds all reax/c/bonds 100 bonds.reaxc
+fix heating1 carbon temp/berendsen 923.0 923.0 $(10.0*dt)
+fix_modify heating1 temp temp_com dynamic/dof yes
+fix recenter carbon recenter INIT INIT INIT
+
+reset_timestep 0
+
+#set group oxygen x 14.419 y 11.25 z 3
+#velocity oxygen set 0.001 0 0
+
+#run 1000#run 1000
+
+fix graph all print 25 "${xvar} ${yvar} ${zvar} ${vxvar} ${vyvar} ${vzvar}" file diffusion923K_epoxy.txt screen no
+
+run 0
+
+write_restart continue923K.txt
+
+#At 923K
+#Diff coeff --> 2.29278413923e-09 #timestep 1
+#Diffcoeff ---> 8.2200581857e-10  #timestep 1
+#Diffcoeff at middle ---> 4.63706543066e-10  #single 2.06139073905e-11
+
+#0.25fs
+#Bilayer --> 7.56899447582e-12
+#single --> 9.0288793768e-12

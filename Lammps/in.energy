@@ -1,0 +1,91 @@
+
+#1.264685
+#-------------Units, Dimensions------------
+units	 real
+
+dimension 3
+
+newton on
+
+processors * * *
+
+boundary p p p
+
+atom_style charge
+
+atom_modify map yes
+
+#----------Create atoms---------------
+
+variable l equal 1.42
+variable s equal 3.4
+variable a1 equal 3*$l
+variable a2 equal (sqrt(3))*$l
+variable a3 equal $s*2
+
+variable a equal 1/6
+variable b equal 2/3
+variable c equal 1/3
+variable d equal 5/6
+
+lattice custom 1.0 a1 ${a1} 0.0 0.0 a2 0.0 ${a2} 0.0 a3 0.0 0.0 ${a3} &
+                    basis 0 0 0 basis $a 0.5 0 basis 0.5 0.5 0 basis $b 0 0 basis 0 0 0.5 basis $c 0 0.5 basis 0.5 0.5 0.5 basis $d 0.5 0.5
+
+variable b1 equal ${a1}*2*2
+variable b2 equal ${a2}*2*3
+
+region mybox block 0.0 ${b1} 0.0 ${b2} -10 15 units box
+create_box 2 mybox 
+region C_domain_1 block 0.0 ${b1} 0.0 ${b2} 0.0 3.3 units box
+create_atoms 1 region C_domain_1
+
+group carbon type 1
+
+#-------------Variable Commands----------
+
+dump graph all custom 100 Energy_*.cfg id type x y z q vx vy vz
+
+#--------------Mass and Velocity--------
+mass 1 12.0107
+mass 2 15.999
+ 
+#---------Neighbor----------------------
+
+neighbor    2 bin
+neigh_modify    every 1 delay 0 check yes
+
+#------------Timestep--------------------
+
+timestep 0.2 #femtoseconds
+
+#---------Pair Style & Coeff------------
+
+pair_style reax/c NULL #controlfile.txt #checkqeq no
+pair_coeff * * ffield.reax.cho C O
+
+fix qeq_reax all qeq/reax 1 0.0 10.0 1.0e-6 reax/c
+
+
+#------------Energy minimization-----
+fix relax all box/relax x 0.0 y 0.0 couple none fixedpoint 0 0 0
+
+min_style cg
+min_modify line quadratic
+minimize 1.0e-30 1.0e-30 10000 1000000
+
+unfix relax
+
+#------velocity--------Fix Commands-------------
+reset_timestep 0
+write_data initial_manyO
+
+compute 1 oxygen pe/atom
+variable oxype equal c_1[1]
+compute 2 all pe
+variable 2 equal c_2
+
+thermo_style custom step etotal temp v_oxype v_2
+thermo_modify lost ignore
+thermo 100
+
+run 1000

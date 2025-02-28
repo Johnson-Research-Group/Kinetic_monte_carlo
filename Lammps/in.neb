@@ -1,0 +1,70 @@
+
+#1.264685
+#-------------Units, Dimensions------------
+units	 real
+
+dimension 3
+
+newton on
+
+boundary p p p
+
+atom_style charge
+
+atom_modify map array sort 0 0.0
+
+#----------Create atoms---------------
+
+variable u uloop 40
+
+read_data initial_SW
+
+group carbon type 1
+group oxygen type 2
+#(region surround block 15 28 14 26 -5 5
+group nebatoms id 97
+group nonneb subtract all nebatoms
+group pin id 42
+
+#--------------Mass and Velocity--------
+mass 1 12.0107
+mass 2 15.999
+ 
+#---------Neighbor----------------------
+
+neighbor    2 bin
+neigh_modify    every 1 delay 0 check yes
+
+#------------Timestep--------------------
+
+timestep 0.2 #femtoseconds
+
+#---------Pair Style & Coeff------------
+
+pair_style reax/c NULL 
+pair_coeff * * ffield.reax.cho C O
+
+fix qeq_reax all qeq/reax 1 0.0 10.0 1.0e-6 reax/c
+
+#-------------------------------------
+
+#thermo_style custom step etotal temp
+#thermo_modify lost ignore
+thermo 100
+
+fix 1 all nve
+fix 2 pin setforce 0.0 0.0 0.0
+fix 3 nebatoms neb 10 parallel ideal
+dump 1 nebatoms atom 10 dump.neb.$u
+dump 2 nonneb atom 10 dump.nonneb.$u
+#dump 3 all atom 100 dump.all.$u.*
+
+min_style quickmin
+
+log log.$u
+#partition yes 1* fix 2 pin setforce 0.0 0.0 0.0
+neb  1e-15 1e-15 10000 10000 100 final final_SW
+
+
+
+
