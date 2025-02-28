@@ -82,15 +82,15 @@ def periodic(site_a,site_b,coord_list,max_x,max_y):
 def isclose(a, b, tol):
 
 	"""
-    This function determines if a is close to b within a tolerence value.
+	This function determines if a is close to b within a tolerence value.
 
-    Parameters:
-    a (int or float): value
+	Parameters:
+	a (int or float): value
 	b (int or float): value
 
-    Returns:
-    int: 1 indicates True and 0 indicates False
-    """
+	Returns:
+	int: 1 indicates True and 0 indicates False
+	"""
 
 	if abs(a-b) <= tol:
 		return 1
@@ -100,14 +100,14 @@ def isclose(a, b, tol):
 def what_edge_carbon_is_it(site):
 
 	"""
-    This function determines what edge type 'site' is based on neighboring sites (zigzag, armchair, double zigzag, triple zigzag, sibgle-bonded carbon, island site, or not in edge).
+	This function determines what edge type 'site' is based on neighboring sites (zigzag, armchair, double zigzag, triple zigzag, sibgle-bonded carbon, island site, or not in edge).
 
-    Parameters:
-    site (int): carbon site index
+	Parameters:
+	site (int): carbon site index
 
-    Returns:
-    string: "ZZ" - zigzag, "AC" - armchair, "DZZ" - double zigzag, "TZZ" - triple zigzag, "SBC" - single-bonded carbon, "Island" - island site, "Not in edge" - basal plane site
-    """
+	Returns:
+	string: "ZZ" - zigzag, "AC" - armchair, "DZZ" - double zigzag, "TZZ" - triple zigzag, "SBC" - single-bonded carbon, "Island" - island site, "Not in edge" - basal plane site
+	"""
 
 	list_n =[]
 	if edge_C[site] =='edg':
@@ -133,28 +133,28 @@ def what_edge_carbon_is_it(site):
 def armchair_pair(site):
 
 	"""
-    This function determines the index of the site that is the armchair pair to 'site'.
+	This function determines the index of the site that is the armchair pair to 'site'.
 
-    Parameters:
-    site (int): carbon site index
+	Parameters:
+	site (int): carbon site index
 
-    Returns:
-    int: index of armchair pair of 'site'
-    """
+	Returns:
+	int: index of armchair pair of 'site'
+	"""
 
 	return next(p for p in near_neigh[site] if 'dg' not in flag[p] and [flag[k] for k in near_neigh[p]].count(['dg']) == 1)
 
 def remove(site):
 
 	"""
-    This function flags 'site' as removed through function 'Epoxy_Ad_C_delete', and sets an covered sites in graphene layers below to be available for oxygen adsorption through function 'Lower_layer'.
+	This function flags 'site' as removed through function 'Epoxy_Ad_C_delete', and sets an covered sites in graphene layers below to be available for oxygen adsorption through function 'Lower_layer'.
 
-    Parameters:
-    site (int): carbon site index
+	Parameters:
+	site (int): carbon site index
 
-    Returns:
-    None
-    """
+	Returns:
+	None
+	"""
 
 	Epoxy_Ad_C_delete(site)
 	Lower_layer(site)
@@ -165,14 +165,14 @@ def remove(site):
 def epoxy_rit(site_O):
 
 	"""
-    This function updates the number sites available for reactions that deal with epoxy sites after list n1 is updated for site_O.
+	This function updates the number sites available for reactions that deal with epoxy sites after list n1 is updated for site_O.
 
-    Parameters:
-    site_O (int): epoxy site index
+	Parameters:
+	site_O (int): epoxy site index
 
-    Returns:
-    None
-    """
+	Returns:
+	None
+	"""
 
 	before_ep_arr = (np.copy(changing_av_ep[site_O]))
 	changing_av_ep[site_O]=np.array(n1)
@@ -182,14 +182,14 @@ def epoxy_rit(site_O):
 def adatom_rit(site):
 
 	"""
-    This function updates the number sites available for reactions that deal with carbon sites after list n2 is updated for site.
+	This function updates the number sites available for reactions that deal with carbon sites after list n2 is updated for site.
 
-    Parameters:
-    site (int): carbon site index
+	Parameters:
+	site (int): carbon site index
 
-    Returns:
-    None
-    """
+	Returns:
+	None
+	"""
 
 	before_ad_arr = np.copy(changing_av_ad[site])
 	changing_av_ad[site]=np.array(n2)
@@ -202,14 +202,14 @@ pos = [2.45953,2.12997,3.25363,3.68925]
 def epoxy_curr_orient(site):
 
 	"""
-    This function classifies the orientaiton of one epoxy 'site' with neighboring epoxies based on 5 classifications depicted as Orient 1, Orient 2,Orient 3, Orient 4 in article.
+	This function classifies the orientaiton of one epoxy 'site' with neighboring epoxies based on 5 classifications depicted as Orient 1, Orient 2,Orient 3, Orient 4 in article.
 
-    Parameters:
-    site (int): epoxy site index
+	Parameters:
+	site (int): epoxy site index
 
-    Returns:
-    list1, list2: list1 is a 2d list, where each list within the list contains the site indices of the epoxies in respective orientations (first list corresponds to Orient 1, second list corresponds to Orient 2..) with 'site'. list2 is a 1d list that contains either 1 or 0, where 1 indicates that an epoxy exists in the respective orientation (first value corresponds to Orient 1, second value corresponds to Orient 2..) with 'site'.
-    """
+	Returns:
+	list1, list2: list1 is a 2d list, where each list within the list contains the site indices of the epoxies in respective orientations (first list corresponds to Orient 1, second list corresponds to Orient 2..) with 'site'. list2 is a 1d list that contains either 1 or 0, where 1 indicates that an epoxy exists in the respective orientation (first value corresponds to Orient 1, second value corresponds to Orient 2..) with 'site'.
+	"""
 
 	ind_epo =[[int(p) for p in epoxy_O_orient[site] if isclose(periodic(p,site,coordinates_O_1,max_O_x+1.065,max_O_y+0.6149), j, 0.1) == 1 and coordinates_O_1[p][3] == coordinates_O_1[site][3] and flag_O_1[p] == 'ep' and [flag[epoxy_O[p][0]],flag[epoxy_O[p][1]]]==[['ep'],['ep']]] for j in pos]
 	ind_epo[0] = [x for x in ind_epo[0] if len([j for j in epoxy_O_move[site] if j in epoxy_O_move[x]])>0]
@@ -226,15 +226,15 @@ def epoxy_curr_orient(site):
 def epoxy_switch_orient(site, switch_site):
 	
 	"""
-    This function finds the orientation of 'site' with 'switch_site' (Orient1, Orient2, Orient3, Orient4).
+	This function finds the orientation of 'site' with 'switch_site' (Orient1, Orient2, Orient3, Orient4).
 
-    Parameters:
-    site (int): epoxy site index
+	Parameters:
+	site (int): epoxy site index
 	switch_site (int): epoxy site index
 
-    Returns:
-    list: a value of 1 or 0 indicating whether the epoxies are in the orientation corresponding to the index value of the element, respectively.
-    """
+	Returns:
+	list: a value of 1 or 0 indicating whether the epoxies are in the orientation corresponding to the index value of the element, respectively.
+	"""
 
 	val = [0]*5
 	value=periodic(switch_site,site,coordinates_O_1,max_O_x+1.065,max_O_y+0.6149)
@@ -252,15 +252,15 @@ def epoxy_switch_orient(site, switch_site):
 def lactone_ether_group(site_C, flags):
 
 	"""
-    This function finds the site indices of relevant neighboring carbon atoms associated with the lactone-ether/ether-lactone-ether group.
+	This function finds the site indices of relevant neighboring carbon atoms associated with the lactone-ether/ether-lactone-ether group.
 
-    Parameters:
-    site_C (int): carbon site index
+	Parameters:
+	site_C (int): carbon site index
 	flags (string): 'la-eth' or 'eth-la-eth'
 
-    Returns:
-    int, int, int, int, int, int: site indices of carbon atoms associated with the lactone-ether or ether-lactone-ether groups.
-    """
+	Returns:
+	int, int, int, int, int, int: site indices of carbon atoms associated with the lactone-ether or ether-lactone-ether groups.
+	"""
 	
 	common_C = next(p for p in near_neigh[site_C]+[site_C] if 'ad' in flag[p] and flags in flag[p])
 
@@ -274,14 +274,14 @@ def lactone_ether_group(site_C, flags):
 def Epoxy_Ad_C_delete(C_atom):
 
 	"""
-    This function deletes the carbon site 'C_atom' and any oxygen atoms associated with it in the epoxy and carbonyl lattice. It also classifies the immediate near neighbors of the carbon atom as an edge site.
+	This function deletes the carbon site 'C_atom' and any oxygen atoms associated with it in the epoxy and carbonyl lattice. It also classifies the immediate near neighbors of the carbon atom as an edge site.
 
-    Parameters:
-    C_atom (int): carbon site index
+	Parameters:
+	C_atom (int): carbon site index
 
-    Returns:
-    None
-    """
+	Returns:
+	None
+	"""
 
 	lay = int(coordinates[C_atom][3])
 
@@ -307,14 +307,14 @@ def Epoxy_Ad_C_delete(C_atom):
 def Lower_layer(site_C):
 
 	"""
-    This function sets appropriate carbon atoms in layers directly below the carbon site 'site_C' as available if all relevant carbon atoms in the layers above have been removed.
+	This function sets appropriate carbon atoms in layers directly below the carbon site 'site_C' as available if all relevant carbon atoms in the layers above have been removed.
 
-    Parameters:
-    site_C (int): carbon site index
+	Parameters:
+	site_C (int): carbon site index
 
-    Returns:
-    None
-    """
+	Returns:
+	None
+	"""
 
 	make_avail_O =[]
 	ll_sites_check = check_below[site_C]
@@ -348,14 +348,14 @@ def Lower_layer(site_C):
 def epoxy_diffusion_ep_1(site):
 
 	"""
-    This function performs diffusion of an epoxy group to a carbon site that is part of a cyclic-ether group.
+	This function performs diffusion of an epoxy group to a carbon site that is part of a cyclic-ether group.
 
-    Parameters:
-    site (int): epoxy site index
+	Parameters:
+	site (int): epoxy site index
 
-    Returns:
-    None
-    """
+	Returns:
+	None
+	"""
 
 	cyc_eth_O = next(p for p in near_neigh[site] if flag_O_3[p] == 'cyc-eth')
 	carb_cyc = [x for x in near_neigh[cyc_eth_O] if 'cyc-eth' in flag[x]]
@@ -369,14 +369,14 @@ def epoxy_diffusion_ep_1(site):
 def epoxy_diffusion_ep_2(site):
 
 	"""
-    This function performs diffusion of an epoxy group to a carbon site that is part of a lactone-ether group.
+	This function performs diffusion of an epoxy group to a carbon site that is part of a lactone-ether group.
 
-    Parameters:
-    site (int): epoxy site index
+	Parameters:
+	site (int): epoxy site index
 
-    Returns:
-    None
-    """
+	Returns:
+	None
+	"""
 
 	common_C,lact_side_C,ether_C,stray_side_C,ether_C_side_C,cyc_eth_C  = lactone_ether_group(chosen, 'la-eth')
 	list_ether_C = epoxy_list[ether_C]
@@ -391,14 +391,14 @@ def epoxy_diffusion_ep_2(site):
 def epoxy_diffusion_ep_3(site):
 
 	"""
-    This function performs diffusion of an epoxy group to a carbon site that is part of a carbonyl group.
+	This function performs diffusion of an epoxy group to a carbon site that is part of a carbonyl group.
 
-    Parameters:
-    site (int): epoxy site index
+	Parameters:
+	site (int): epoxy site index
 
-    Returns:
-    None
-    """
+	Returns:
+	None
+	"""
 
 	flag_O_2[pivot_C]='carb_O'
 	flag[pivot_C].remove('ep')
@@ -407,14 +407,14 @@ def epoxy_diffusion_ep_3(site):
 def epoxy_diffusion_ep_fast(site):
 
 	"""
-    This function performs diffusion of an epoxy group when all carbon near neighbors around it are pristine sites.
+	This function performs diffusion of an epoxy group when all carbon near neighbors around it are pristine sites.
 
-    Parameters:
-    site (int): epoxy site index
+	Parameters:
+	site (int): epoxy site index
 
-    Returns:
-    None
-    """
+	Returns:
+	None
+	"""
 
 	switch_O_ep = [p for p in epoxy_O_move[site] if chosen in epoxy_O[p]][0]
 	flag_O_1[site] = 'pr'
@@ -425,14 +425,14 @@ def epoxy_diffusion_ep_fast(site):
 def split_O2_adsorption(site):
 
 	"""
-    This function performs the adsorption of two epoxies on the basal plane from molecular oxygen.
+	This function performs the adsorption of two epoxies on the basal plane from molecular oxygen.
 
-    Parameters:
-    site (int): epoxy site index
+	Parameters:
+	site (int): epoxy site index
 
-    Returns:
-    None
-    """
+	Returns:
+	None
+	"""
 
 	chosen_O = np.random.choice([x for x in epoxy_O_split[site] if (flag_O_1[x]=='pr' and [flag[epoxy_O[x][0]],flag[epoxy_O[x][1]]]==[['pr'],['pr']])])
 
@@ -445,14 +445,14 @@ def split_O2_adsorption(site):
 def adsorption_ep(site):
 
 	"""
-    This function performs the adsorption of an epoxy onto pristine carbon atoms.
+	This function performs the adsorption of an epoxy onto pristine carbon atoms.
 
-    Parameters:
-    site (int): epoxy site index
+	Parameters:
+	site (int): epoxy site index
 
-    Returns:
-    None
-    """
+	Returns:
+	None
+	"""
 
 	for i in epoxy_O[site]: epoxy_make_ep_C(i)
 	flag_O_1[site] = 'ep'
@@ -460,14 +460,14 @@ def adsorption_ep(site):
 def Recomb_O2_Desorp_ep(site):
 
 	"""
-    This function performs the recombination of two epoxies into gaseous molecular oxygen.
+	This function performs the recombination of two epoxies into gaseous molecular oxygen.
 
-    Parameters:
-    site (int): epoxy site index
+	Parameters:
+	site (int): epoxy site index
 
-    Returns:
-    None
-    """
+	Returns:
+	None
+	"""
 
 	switch = int(np.random.choice((epoxy_curr_orient(site)[0])[1]))
 
@@ -478,14 +478,14 @@ def Recomb_O2_Desorp_ep(site):
 def adsorption_ad(site):
 
 	"""
-    This function performs the adsorption of an oxygen atom onto a carbon site 'site'. Changes will be made to the flags in the carbon lattice and the carbonyl lattice. Since the carbon and carbonyl lattice have the same structure, the indices of the carbon and oxygen lattice are the same in both.
+	This function performs the adsorption of an oxygen atom onto a carbon site 'site'. Changes will be made to the flags in the carbon lattice and the carbonyl lattice. Since the carbon and carbonyl lattice have the same structure, the indices of the carbon and oxygen lattice are the same in both.
 
-    Parameters:
-    site (int): carbon site index
+	Parameters:
+	site (int): carbon site index
 
-    Returns:
-    None
-    """
+	Returns:
+	None
+	"""
 
 	flag_O_2[site] = 'ad'
 	flag[site] = ['ad']
@@ -493,14 +493,14 @@ def adsorption_ad(site):
 def epoxy_remove_C(site_C):
 
 	"""
-    This function removes an epoxy flag from a carbon site 'site_C', without removing any other flags the carbon site may have.
+	This function removes an epoxy flag from a carbon site 'site_C', without removing any other flags the carbon site may have.
 
-    Parameters:
-    site_C (int): carbon site index
+	Parameters:
+	site_C (int): carbon site index
 
-    Returns:
-    None
-    """
+	Returns:
+	None
+	"""
 
 	if flag[site_C] == ['ep']:
 			flag[site_C] = ['pr']
@@ -510,14 +510,14 @@ def epoxy_remove_C(site_C):
 def epoxy_make_ep_C(site_C):
 
 	"""
-    This function flags 'site_C' as a carbon site with an epoxy adsorbed on it without affecting any flags it might have.
+	This function flags 'site_C' as a carbon site with an epoxy adsorbed on it without affecting any flags it might have.
 
-    Parameters:
-    site_C (int): carbon site index
+	Parameters:
+	site_C (int): carbon site index
 
-    Returns:
-    None
-    """
+	Returns:
+	None
+	"""
 
 	if flag[site_C] == ['pr']:
 			flag[site_C] = ['ep']
@@ -527,15 +527,15 @@ def epoxy_make_ep_C(site_C):
 def epoxy_move(site, switch_O):
 
 	"""
-    This function moves an epoxy from site with index 'site' to 'switch_O'.
+	This function moves an epoxy from site with index 'site' to 'switch_O'.
 
-    Parameters:
-    site (int): epoxy site index
+	Parameters:
+	site (int): epoxy site index
 	switch_O (int): epoxy site index
 
-    Returns:
-    None
-    """
+	Returns:
+	None
+	"""
 
 	flag_O_1[site] = 'pr'
 	for i in epoxy_O[site]:
@@ -547,14 +547,14 @@ def epoxy_move(site, switch_O):
 def ep_diff_1_2(site):
 
 	"""
-    This function moves an epoxy from site with index 'site' to a random epoxy index from the list 'switch_O_1' defined prior to calling this function in order to make the epoxy 'site' go from being in Orientation 1 to Orientation 2 with a nearby epoxy.
+	This function moves an epoxy from site with index 'site' to a random epoxy index from the list 'switch_O_1' defined prior to calling this function in order to make the epoxy 'site' go from being in Orientation 1 to Orientation 2 with a nearby epoxy.
 
-    Parameters:
-    site (int): epoxy site index
+	Parameters:
+	site (int): epoxy site index
 
-    Returns:
-    None
-    """
+	Returns:
+	None
+	"""
 
 	switch_O = np.random.choice(switch_O_1)
 	epoxy_move(site, switch_O)
@@ -562,14 +562,14 @@ def ep_diff_1_2(site):
 def ep_diff_2_3(site):
 
 	"""
-    This function moves an epoxy from site with index 'site' to a random epoxy index from the list 'switch_O_2' defined prior to calling this function in order to make the epoxy 'site' go from being in Orientation 2 to Orientation 3 with a nearby epoxy.
+	This function moves an epoxy from site with index 'site' to a random epoxy index from the list 'switch_O_2' defined prior to calling this function in order to make the epoxy 'site' go from being in Orientation 2 to Orientation 3 with a nearby epoxy.
 
-    Parameters:
-    site (int): epoxy site index
+	Parameters:
+	site (int): epoxy site index
 
-    Returns:
-    None
-    """
+	Returns:
+	None
+	"""
 
 	switch_O = np.random.choice(switch_O_2)
 	epoxy_move(site, switch_O)
@@ -577,14 +577,14 @@ def ep_diff_2_3(site):
 def ep_diff_1_4(site):
 
 	"""
-    This function moves an epoxy from site with index 'site' to a random epoxy index from the list 'switch_O_3' defined prior to calling this function in order to make the epoxy 'site' go from being in Orientation 1 to Orientation 4 with a nearby epoxy.
+	This function moves an epoxy from site with index 'site' to a random epoxy index from the list 'switch_O_3' defined prior to calling this function in order to make the epoxy 'site' go from being in Orientation 1 to Orientation 4 with a nearby epoxy.
 
-    Parameters:
-    site (int): epoxy site index
+	Parameters:
+	site (int): epoxy site index
 
-    Returns:
-    None
-    """
+	Returns:
+	None
+	"""
 
 	switch_O = np.random.choice(switch_O_3)
 	epoxy_move(site, switch_O)
@@ -592,14 +592,14 @@ def ep_diff_1_4(site):
 def pos1_to_Epoxy_Ether(site):
 
 	"""
-    This function converts an epoxy 'site' and its neighboring epoxy group in Orientation 1 to an epoxy-ether group
+	This function converts an epoxy 'site' and its neighboring epoxy group in Orientation 1 to an epoxy-ether group
 
-    Parameters:
-    site (int): epoxy site index
+	Parameters:
+	site (int): epoxy site index
 
-    Returns:
-    None
-    """
+	Returns:
+	None
+	"""
 
 	flag_O_1[site] = 'pr'
 	for i in epoxy_O[site]:
@@ -618,14 +618,14 @@ def pos1_to_Epoxy_Ether(site):
 def epoxy_ether(site):
 	
 	"""
-    This function finds the site indices of relevant neighboring carbon atoms associated with the epoxy-ether group, given an oxygen site 'site' in the epoxy-ether group.
+	This function finds the site indices of relevant neighboring carbon atoms associated with the epoxy-ether group, given an oxygen site 'site' in the epoxy-ether group.
 
-    Parameters:
-    site_C (int): carbon site index
+	Parameters:
+	site_C (int): carbon site index
 
-    Returns:
-    int, int, int, int, int, int, int, int, int: site indices of carbon and oxygen atoms associated with the epoxy-ether group.
-    """
+	Returns:
+	int, int, int, int, int, int, int, int, int: site indices of carbon and oxygen atoms associated with the epoxy-ether group.
+	"""
 
 	for i in epoxy_O[site]:
 		if 'common' in flag[i]:
@@ -643,14 +643,14 @@ def epoxy_ether(site):
 def Epoxy_Ether_to_pos1(site):
 
 	"""
-    This function converts an epoxy-ether group to two epoxies in Orientation 1, given oxygen site 'site' associated with the epoxy-ether.
+	This function converts an epoxy-ether group to two epoxies in Orientation 1, given oxygen site 'site' associated with the epoxy-ether.
 
-    Parameters:
-    site (int): epoxy site index
+	Parameters:
+	site (int): epoxy site index
 
-    Returns:
-    None
-    """
+	Returns:
+	None
+	"""
 
 	switch_O = [p for p in epoxy_O_move[site] if epoxy_switch_orient(p, ether_O)[0] == 1 and any(flag[g]==['pr'] for g in epoxy_O[p])==True][0]
 
@@ -671,14 +671,14 @@ def Epoxy_Ether_to_pos1(site):
 def Ep_Eth__Ep_Eth_Ep(site): #Epoxy Ether to Lactone Ether
 
 	"""
-    This function converts an epoxy-ether group to a lactone-ether group, given oxygen site 'site' associated with the epoxy-ether.
+	This function converts an epoxy-ether group to a lactone-ether group, given oxygen site 'site' associated with the epoxy-ether.
 
-    Parameters:
-    site (int): epoxy site index
+	Parameters:
+	site (int): epoxy site index
 
-    Returns:
-    None
-    """
+	Returns:
+	None
+	"""
 
 	common_C,ether_C,epox_C,ether_O,epox_O,opp_ad_c,ether_C_side_C,cyc_eth_C = epoxy_ether(site)
 
@@ -712,14 +712,14 @@ def Ep_Eth__Ep_Eth_Ep(site): #Epoxy Ether to Lactone Ether
 def la_eth_CO(site): #Lactone Ether to carbonyl and cyclic ether (CO)
 
 	"""
-    This function converts a lactone-ether group to a carbonyl and cyclic-ether group, given a carbon site 'site' associated with the lactone-ether.
+	This function converts a lactone-ether group to a carbonyl and cyclic-ether group, given a carbon site 'site' associated with the lactone-ether.
 
-    Parameters:
-    site (int): carbon site index
+	Parameters:
+	site (int): carbon site index
 
-    Returns:
-    None
-    """
+	Returns:
+	None
+	"""
 
 	common_C, lact_side_C, ether_C, stray_side_C, ether_C_side_C,cyc_eth_C = lactone_ether_group(site, 'la-eth')
 	ether_O = [x[1] for x in epoxy_list[site] if x[0]==ether_C][0]
@@ -738,14 +738,14 @@ def la_eth_CO(site): #Lactone Ether to carbonyl and cyclic ether (CO)
 def eth_la_eth_CO(site): # Ether lactone ether to lactone at vacancy and cyclic ether (CO)
 
 	"""
-    This function converts a lactone-ether group to a lactone group at a vacancy, and a cyclic-ether, given a carbon site 'site' associated with the lactone-ether. This reaction produces a CO molecule.
+	This function converts a lactone-ether group to a lactone group at a vacancy, and a cyclic-ether, given a carbon site 'site' associated with the lactone-ether. This reaction produces a CO molecule.
 
-    Parameters:
-    site (int): carbon site index
+	Parameters:
+	site (int): carbon site index
 
-    Returns:
-    None
-    """
+	Returns:
+	None
+	"""
 
 	common_C, lact_side_C, ether_C, stray_side_C, ether_C_side_C,cyc_eth_C = lactone_ether_group(site, 'eth-la-eth')
 	list_ether_C = epoxy_list[ether_C]
@@ -767,14 +767,14 @@ def eth_la_eth_CO(site): # Ether lactone ether to lactone at vacancy and cyclic 
 def la_eth_CO2(site): # lactone ether to carbonyl (CO2)
 
 	"""
-    This function converts a lactone-ether group to a carbonyl group, given a carbon site 'site' associated with the lactone-ether. This reaction produces a CO2 molecule.
+	This function converts a lactone-ether group to a carbonyl group, given a carbon site 'site' associated with the lactone-ether. This reaction produces a CO2 molecule.
 
-    Parameters:
-    site (int): carbon site index
+	Parameters:
+	site (int): carbon site index
 
-    Returns:
-    None
-    """
+	Returns:
+	None
+	"""
 
 	common_C, lact_side_C, ether_C, stray_side_C, ether_C_side_C,cyc_eth_C = lactone_ether_group(site, 'la-eth')
 	ether_O = [x[1] for x in epoxy_list[site] if x[0]==ether_C][0]
@@ -792,14 +792,14 @@ def la_eth_CO2(site): # lactone ether to carbonyl (CO2)
 def eth_la_eth_CO2(site): # Ether lactone ether to carbonyl and cyclic ether (CO2)
 
 	"""
-    This function converts a lactone-ether group to a carbonyl group and cyclic-ether group, given a carbon site 'site' associated with the lactone-ether. This reaction produces a CO2 molecule.
+	This function converts a lactone-ether group to a carbonyl group and cyclic-ether group, given a carbon site 'site' associated with the lactone-ether. This reaction produces a CO2 molecule.
 
-    Parameters:
-    site (int): carbon site index
+	Parameters:
+	site (int): carbon site index
 
-    Returns:
-    None
-    """
+	Returns:
+	None
+	"""
 
 	common_C, lact_side_C, ether_C, stray_side_C, ether_C_side_C,cyc_eth_C = lactone_ether_group(site, 'eth-la-eth')
 	other_ether = [x[1] for x in epoxy_list[ether_C] if x[0]==ether_C_side_C][0]
@@ -818,14 +818,14 @@ def eth_la_eth_CO2(site): # Ether lactone ether to carbonyl and cyclic ether (CO
 def la_vac_CO(site): #lactone at vacancy to cyclic ether (CO)
 
 	"""
-    This function converts a lactone group to a lactone group at a vacancy, and cyclic-ether group, given a carbon site 'site' associated with the lactone. This reaction produces a CO molecule.
+	This function converts a lactone group to a lactone group at a vacancy, and cyclic-ether group, given a carbon site 'site' associated with the lactone. This reaction produces a CO molecule.
 
-    Parameters:
-    site (int): carbon site index
+	Parameters:
+	site (int): carbon site index
 
-    Returns:
-    None
-    """
+	Returns:
+	None
+	"""
 
 	ether_C = next(p for p in near_neigh[site] if 'eth' in flag[p] and 'la-vac' in flag[p])
 	other_C = next(p for p in near_neigh[site] if p!=ether_C and 'dg' not in flag[p])
@@ -840,14 +840,14 @@ def la_vac_CO(site): #lactone at vacancy to cyclic ether (CO)
 def la_vac_epoxy_CO(site): #lactone at vacancy to 2 carbonyls (CO)
 
 	"""
-    This function converts a lactone group at a vacancy (in the presence of an epoxy) to 2 carbonyl groups, given a carbon site 'site' associated with the lactone. This reaction produces a CO molecule.
+	This function converts a lactone group at a vacancy (in the presence of an epoxy) to 2 carbonyl groups, given a carbon site 'site' associated with the lactone. This reaction produces a CO molecule.
 
-    Parameters:
-    site (int): carbon site index
+	Parameters:
+	site (int): carbon site index
 
-    Returns:
-    None
-    """
+	Returns:
+	None
+	"""
 
 	ether_C = next(p for p in near_neigh[site] if 'eth' in flag[p] and 'la-vac' in flag[p])
 	cyc_C = next(p for p in near_neigh[site] if 'cyc-eth-C' in flag[p] and 'la-vac' in flag[p])
@@ -870,14 +870,14 @@ def la_vac_epoxy_CO(site): #lactone at vacancy to 2 carbonyls (CO)
 def la_vac_CO2(site): #lactone at vacancy to pristine (CO2)
 
 	"""
-    This function converts a lactone group at a vacancy to CO2 molecule, given a carbon site 'site' associated with the lactone.
+	This function converts a lactone group at a vacancy to CO2 molecule, given a carbon site 'site' associated with the lactone.
 
-    Parameters:
-    site (int): carbon site index
+	Parameters:
+	site (int): carbon site index
 
-    Returns:
-    None
-    """
+	Returns:
+	None
+	"""
 
 	ether_C = next(p for p in near_neigh[site] if 'eth' in flag[p] and 'la-vac' in flag[p])
 	other_C = next(p for p in near_neigh[site] if p!=ether_C and 'dg' not in flag[p])
@@ -891,14 +891,14 @@ def la_vac_CO2(site): #lactone at vacancy to pristine (CO2)
 def la_vac_epoxy_CO2(site): #lactone at vacancy to cycliic ether (CO2)
 
 	"""
-    This function converts a lactone group at a vacancy (in the presence of an epoxy) to 2 cyclic-ethers, given a carbon site 'site' associated with the lactone. This reaction produces CO2.
+	This function converts a lactone group at a vacancy (in the presence of an epoxy) to 2 cyclic-ethers, given a carbon site 'site' associated with the lactone. This reaction produces CO2.
 
-    Parameters:
-    site (int): carbon site index
+	Parameters:
+	site (int): carbon site index
 
-    Returns:
-    None
-    """
+	Returns:
+	None
+	"""
 
 	ether_C = next(p for p in near_neigh[site] if 'eth' in flag[p] and 'la-vac' in flag[p])
 	cyc_C = next(p for p in near_neigh[site] if 'cyc-eth-C' in flag[p] and 'la-vac' in flag[p])
@@ -921,14 +921,14 @@ def la_vac_epoxy_CO2(site): #lactone at vacancy to cycliic ether (CO2)
 def la_eth_to_eth_la_eth(site):
 
 	"""
-    This function converts a lactone-ether group to an ether-lactone-ether group, given a carbon site 'site' associated with the lactone-ether.
+	This function converts a lactone-ether group to an ether-lactone-ether group, given a carbon site 'site' associated with the lactone-ether.
 
-    Parameters:
-    site (int): carbon site index
+	Parameters:
+	site (int): carbon site index
 
-    Returns:
-    None
-    """
+	Returns:
+	None
+	"""
 
 	common_C,lact_side_C,ether_C,stray_side_C,ether_C_side_C,cyc_eth_C  = lactone_ether_group(site, 'la-eth')
 	carbon_ep = next(p for p in list(itertools.chain(*[near_neigh[k] for k in lactone_ether_group(site, 'la-eth')])) if 'ep' in flag[p])
@@ -955,14 +955,14 @@ def la_eth_to_eth_la_eth(site):
 def O2_edge_ad(site):
 
 	"""
-    This function performs adsorption of molecular oxygen onto a carbon edge site 'site'.
+	This function performs adsorption of molecular oxygen onto a carbon edge site 'site'.
 
-    Parameters:
-    site (int): carbon site index
+	Parameters:
+	site (int): carbon site index
 
-    Returns:
-    None
-    """
+	Returns:
+	None
+	"""
 
 	flag[site] = ['carb_O2']
 	flag_O_2[site] = 'carb_O2'
@@ -970,14 +970,14 @@ def O2_edge_ad(site):
 def O_edge_ad(site):
 
 	"""
-    This function performs adsorption of atomic oxygen onto the carbon edge site 'site'.
+	This function performs adsorption of atomic oxygen onto the carbon edge site 'site'.
 
-    Parameters:
-    site (int): carbon site index
+	Parameters:
+	site (int): carbon site index
 
-    Returns:
-    None
-    """
+	Returns:
+	None
+	"""
 
 	flag[site] = ['carb_O']
 	flag_O_2[site] = 'carb_O'
@@ -985,14 +985,14 @@ def O_edge_ad(site):
 def O2_split_diff_ZZ1(site):
 
 	"""
-    This function performs dissociation and diffusion of O2 adsorbed onto a zigzag carbon edge site, 'site', onto a neighboring zigzag site.
+	This function performs dissociation and diffusion of O2 adsorbed onto a zigzag carbon edge site, 'site', onto a neighboring zigzag site.
 
-    Parameters:
-    site (int): carbon site index
+	Parameters:
+	site (int): carbon site index
 
-    Returns:
-    None
-    """
+	Returns:
+	None
+	"""
 
 	chosen_C_site = next(i for i in ZigZag_neigh[site] if flag[i]==['pr'] and what_edge_carbon_is_it(i)[0]=="ZZ")
 	flag[chosen_C_site] = ['carb_O']
@@ -1003,14 +1003,14 @@ def O2_split_diff_ZZ1(site):
 def O2_split_diff_AC1(site):
 
 	"""
-    This function performs dissociation and diffusion of O2 adsorbed onto a armchair carbon edge site, 'site', onto the pristine armchair pair site.
+	This function performs dissociation and diffusion of O2 adsorbed onto a armchair carbon edge site, 'site', onto the pristine armchair pair site.
 
-    Parameters:
-    site (int): carbon site index
+	Parameters:
+	site (int): carbon site index
 
-    Returns:
-    None
-    """
+	Returns:
+	None
+	"""
 
 	other_arm_chair = armchair_pair(site)
 	flag[site] = ['carb_O']
@@ -1021,14 +1021,14 @@ def O2_split_diff_AC1(site):
 def O2_split_diff_AC2(site):
 
 	"""
-    This function performs dissociation and diffusion of O2 adsorbed onto a armchair carbon edge site, 'site', onto a neighboring pristine armchair site that is not the armchair pair of 'site'.
+	This function performs dissociation and diffusion of O2 adsorbed onto a armchair carbon edge site, 'site', onto a neighboring pristine armchair site that is not the armchair pair of 'site'.
 
-    Parameters:
-    site (int): carbon site index
+	Parameters:
+	site (int): carbon site index
 
-    Returns:
-    None
-    """
+	Returns:
+	None
+	"""
 
 	other_arm_chair = next(i for i in Arm_chair_neigh[site] if flag[i]==['pr'] and what_edge_carbon_is_it(i)[0]=="AC")
 	flag[site] = ['carb_O']
@@ -1039,14 +1039,14 @@ def O2_split_diff_AC2(site):
 def O2_split_diff_ZZ2(site):
 
 	"""
-    This function performs dissociation and diffusion of O2 adsorbed onto a zigzag carbon edge site, 'site', as a carbonyl group, and an epoxy group.
+	This function performs dissociation and diffusion of O2 adsorbed onto a zigzag carbon edge site, 'site', as a carbonyl group, and an epoxy group.
 
-    Parameters:
-    site (int): carbon site index
+	Parameters:
+	site (int): carbon site index
 
-    Returns:
-    None
-    """
+	Returns:
+	None
+	"""
 
 	chosen_C = next(i for i in near_neigh[site] if flag[i]==['pr'] and any(flag[k]==['pr'] and edge_C[k] !='edg' for k in near_neigh[i])==True)
 	ep_C2 = next(i for i in near_neigh[chosen_C] if flag[i]==['pr'] and edge_C[i] !='edg')
@@ -1060,14 +1060,14 @@ def O2_split_diff_ZZ2(site):
 def O2_des(site):
 
 	"""
-    This function performs the desoption of adsorbed molecular oxygen on defect edge site 'site'.
+	This function performs the desoption of adsorbed molecular oxygen on defect edge site 'site'.
 
-    Parameters:
-    site (int): carbon site index
+	Parameters:
+	site (int): carbon site index
 
-    Returns:
-    None
-    """
+	Returns:
+	None
+	"""
 
 	flag[site] =['pr']
 	flag_O_2[site] = 'pr'
@@ -1075,14 +1075,14 @@ def O2_des(site):
 def no_ep_ZZ_CO(site):
 
 	"""
-    This function performs CO formation of a carbonyl group at a zigzag carbon edge site, 'site', in the presence of no epoxy groups.
+	This function performs CO formation of a carbonyl group at a zigzag carbon edge site, 'site', in the presence of no epoxy groups.
 
-    Parameters:
-    site (int): carbon site index
+	Parameters:
+	site (int): carbon site index
 
-    Returns:
-    None
-    """
+	Returns:
+	None
+	"""
 
 	Epoxy_Ad_C_delete(site)
 	Lower_layer(site)
@@ -1090,14 +1090,14 @@ def no_ep_ZZ_CO(site):
 def one_ep_ZZ_CO(site):
 
 	"""
-    This function performs CO formation of a carbonyl group at a zigzag carbon edge site, 'site', in the presence of one epoxy group.
+	This function performs CO formation of a carbonyl group at a zigzag carbon edge site, 'site', in the presence of one epoxy group.
 
-    Parameters:
-    site (int): carbon site index
+	Parameters:
+	site (int): carbon site index
 
-    Returns:
-    None
-    """
+	Returns:
+	None
+	"""
 
 	Epoxy_Ad_C_delete(site)
 	Lower_layer(site)
@@ -1118,14 +1118,14 @@ def one_ep_ZZ_CO(site):
 def two_ep_ZZ_CO(site):
 
 	"""
-    This function performs CO formation of a carbonyl group at a zigzag carbon edge site, 'site', in the presence of two epoxy groups.
+	This function performs CO formation of a carbonyl group at a zigzag carbon edge site, 'site', in the presence of two epoxy groups.
 
-    Parameters:
-    site (int): carbon site index
+	Parameters:
+	site (int): carbon site index
 
-    Returns:
-    None
-    """
+	Returns:
+	None
+	"""
 
 	Epoxy_Ad_C_delete(site)
 	Lower_layer(site)
@@ -1144,14 +1144,14 @@ def two_ep_ZZ_CO(site):
 def one_AC_CO(site):
 
 	"""
-    This function performs CO formation of a carbonyl group at a armchair carbon edge site, 'site', when the armchair pair site is pristine.
+	This function performs CO formation of a carbonyl group at a armchair carbon edge site, 'site', when the armchair pair site is pristine.
 
-    Parameters:
-    site (int): carbon site index
+	Parameters:
+	site (int): carbon site index
 
-    Returns:
-    None
-    """
+	Returns:
+	None
+	"""
 
 	Epoxy_Ad_C_delete(site)
 	Lower_layer(site)
@@ -1159,14 +1159,14 @@ def one_AC_CO(site):
 def two_AC_CO(site):
 
 	"""
-    This function performs CO formation of a carbonyl group at a armchair carbon edge site, 'site', when the armchair pair site has a carbonyl group.
+	This function performs CO formation of a carbonyl group at a armchair carbon edge site, 'site', when the armchair pair site has a carbonyl group.
 
-    Parameters:
-    site (int): carbon site index
+	Parameters:
+	site (int): carbon site index
 
-    Returns:
-    None
-    """
+	Returns:
+	None
+	"""
 
 	Epoxy_Ad_C_delete(site)
 	Lower_layer(site)
@@ -1174,14 +1174,14 @@ def two_AC_CO(site):
 def one_AC_ep_CO(site):
 
 	"""
-    This function performs CO formation of a carbonyl group at a armchair carbon edge site, 'site', when the armchair pair site is pristine, and there is one epoxy present in the vicinity of 'site'.
+	This function performs CO formation of a carbonyl group at a armchair carbon edge site, 'site', when the armchair pair site is pristine, and there is one epoxy present in the vicinity of 'site'.
 
-    Parameters:
-    site (int): carbon site index
+	Parameters:
+	site (int): carbon site index
 
-    Returns:
-    None
-    """
+	Returns:
+	None
+	"""
 
 	epox_C = epox_C_1
 	list_epox_C = epoxy_list[epox_C]
@@ -1201,14 +1201,14 @@ def one_AC_ep_CO(site):
 def two_AC_ep_CO(site):
 
 	"""
-    This function performs CO formation of a carbonyl group at a armchair carbon edge site, 'site', when the armchair pair site has a carbonyl group, and there is one epoxy present in the vicinity of 'site'.
+	This function performs CO formation of a carbonyl group at a armchair carbon edge site, 'site', when the armchair pair site has a carbonyl group, and there is one epoxy present in the vicinity of 'site'.
 
-    Parameters:
-    site (int): carbon site index
+	Parameters:
+	site (int): carbon site index
 
-    Returns:
-    None
-    """
+	Returns:
+	None
+	"""
 
 	epox_C = next(p for p in [epox_C_1, epox_C_2] if flag[p] == ['ep'])
 	list_epox_C = epoxy_list[epox_C]
@@ -1232,14 +1232,14 @@ def two_AC_ep_CO(site):
 def one_DZZ(site):
 
 	"""
-    This function performs CO formation of a carbonyl group at a double zigzag site 'site'.
+	This function performs CO formation of a carbonyl group at a double zigzag site 'site'.
 
-    Parameters:
-    site (int): carbon site index
+	Parameters:
+	site (int): carbon site index
 
-    Returns:
-    None
-    """
+	Returns:
+	None
+	"""
 
 	Epoxy_Ad_C_delete(site)
 	Lower_layer(site)
@@ -1247,14 +1247,14 @@ def one_DZZ(site):
 def two_DZZ(site):
 
 	"""
-     This function performs CO formation of a carbonyl group at a double zigzag site 'site', where there are two carbonyl groups present at the double zigzag site.
+	 This function performs CO formation of a carbonyl group at a double zigzag site 'site', where there are two carbonyl groups present at the double zigzag site.
 
-    Parameters:
-    site (int): carbon site index
+	Parameters:
+	site (int): carbon site index
 
-    Returns:
-    None
-    """
+	Returns:
+	None
+	"""
 
 	Epoxy_Ad_C_delete(site)
 	Lower_layer(site)
@@ -1262,14 +1262,14 @@ def two_DZZ(site):
 def three_DZZ(site):
 
 	"""
-    This function performs CO formation of a carbonyl group at a double zigzag site 'site', where there are three carbonyl groups present at the double zigzag site.
+	This function performs CO formation of a carbonyl group at a double zigzag site 'site', where there are three carbonyl groups present at the double zigzag site.
 
-    Parameters:
-    site (int): carbon site index
+	Parameters:
+	site (int): carbon site index
 
-    Returns:
-    None
-    """
+	Returns:
+	None
+	"""
 
 	Epoxy_Ad_C_delete(site)
 	Lower_layer(site)
@@ -1277,14 +1277,14 @@ def three_DZZ(site):
 def SBC_CO(site):
 
 	"""
-    This function performs CO formation of a carbonyl group at a single-bonded carbon site 'site'.
+	This function performs CO formation of a carbonyl group at a single-bonded carbon site 'site'.
 
-    Parameters:
-    site (int): carbon site index
+	Parameters:
+	site (int): carbon site index
 
-    Returns:
-    None
-    """
+	Returns:
+	None
+	"""
 
 	Epoxy_Ad_C_delete(site)
 	Lower_layer(site)
@@ -1292,14 +1292,14 @@ def SBC_CO(site):
 def SBC_ep_CO(site):
 
 	"""
-    This function performs CO formation of a carbonyl group at a single-bonded carbon site 'site', in the presence of an epoxy group.
+	This function performs CO formation of a carbonyl group at a single-bonded carbon site 'site', in the presence of an epoxy group.
 
-    Parameters:
-    site (int): carbon site index
+	Parameters:
+	site (int): carbon site index
 
-    Returns:
-    None
-    """
+	Returns:
+	None
+	"""
 
 	Epoxy_Ad_C_delete(site) # Epoxy group gets automatically deleted here
 	Lower_layer(site)
@@ -1355,13 +1355,13 @@ coord_z=[]
 
 count=0
 for line in file:
-    count += 1
+	count += 1
 linesno=count
 
 for line in file[9:count]:
-    coord_x.append(float(line.split()[1]))
-    coord_y.append(float(line.split()[2]))
-    coord_z.append(float(line.split()[3]))
+	coord_x.append(float(line.split()[1]))
+	coord_y.append(float(line.split()[2]))
+	coord_z.append(float(line.split()[3]))
 
 f1.close()
 
@@ -1409,13 +1409,13 @@ coord_z=[]
 
 count=0
 for line in file:
-    count += 1
+	count += 1
 linesno=count
 
 for line in file[9:count]:
-    coord_x.append(float(line.split()[1]))
-    coord_y.append(float(line.split()[2]))
-    coord_z.append(float(line.split()[3]))
+	coord_x.append(float(line.split()[1]))
+	coord_y.append(float(line.split()[2]))
+	coord_z.append(float(line.split()[3]))
 
 f1.close()
 
