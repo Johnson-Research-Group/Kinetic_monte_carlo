@@ -165,7 +165,7 @@ def remove(site):
 def epoxy_rit(site_O):
 
 	"""
-    This function updates the sites available for reactions that deal with epoxy sites after a reaction is performed on site_O.
+    This function updates the number sites available for reactions that deal with epoxy sites after list n1 is updated for site_O.
 
     Parameters:
     site_O (int): epoxy site index
@@ -180,6 +180,17 @@ def epoxy_rit(site_O):
 	sur_av_ep[:] = sur_av_ep[:] + diff
 
 def adatom_rit(site):
+
+	"""
+    This function updates the number sites available for reactions that deal with carbon sites after list n2 is updated for site.
+
+    Parameters:
+    site (int): carbon site index
+
+    Returns:
+    None
+    """
+
 	before_ad_arr = np.copy(changing_av_ad[site])
 	changing_av_ad[site]=np.array(n2)
 	diff = changing_av_ad[site]-before_ad_arr
@@ -1293,8 +1304,9 @@ def SBC_ep_CO(site):
 	Epoxy_Ad_C_delete(site) # Epoxy group gets automatically deleted here
 	Lower_layer(site)
 
-
-# ============================ Parameters ============================
+# ============================================================================================
+#                                        Parameters
+# ============================================================================================
 
 # Size unit of graphene sheets
 size = 20
@@ -1302,7 +1314,7 @@ size = 20
 # No. of graphene layers
 no_of_layers = 5
 
-#Constants
+# onstants
 k_b_ev = 8.6173 * 10**(-5) # Boltzmann's constant [eV K^-1]
 k_b = 1.3806*(10**(-23)) # Boltzmann's constant [J/K]
 h = 6.62607*(10**(-34)) # Planck's constant [Js]
@@ -1310,7 +1322,7 @@ m_O = 2.657*(10**(-26)) # Mass of oxygen atom [kg]
 m_C = 1.99 * 10**(-26) # Mass of oxygen molecule [kg]
 A_eff = 2.6199 * (10**-20) # Effective area for oxygen adsorption [m^2]
 
-#Parameters
+# Parameters
 stick_coeff = 1 # Sticking coefficient of oxygen atoms for adsorption
 T_s = T_g = 1500 # Temperature of surface and gas [K]
 P_stag = 10000 # Pressure of gas mixture [Pa]
@@ -1328,7 +1340,11 @@ X = gas1['O','O2'].X # Mole fractions of atomic and molecular oxygen
 P_O = X[0]*P_stag # Partial pressure of atomic oxygen
 P_O2 = X[1]*P_stag # Partial pressure of molecular oxygen
 
-# ============================ Load carbon lattice ============================
+# ==================================================================================================
+#                                           Load Lattices
+# ==================================================================================================
+
+# -------------------------------------- Load carbon lattice ---------------------------------------
 
 f1=open("coordinates_%s_%d.cfg"%(str(size),no_of_layers),"r")
 file=f1.readlines()
@@ -1371,18 +1387,18 @@ max_C_z = max(coordC_z)[0]
 # Surface area of graphene sheets in m^2
 Surf_area = ((max_C_y*max_C_x)*(10**(-20)))
 
-# ============================ Create carbonyl lattice ============================
+# ------------------------------------ Create carbonyl lattice ------------------------------------
 
 # Replicate carbon lattice for carbonyl lattice (x coordinates, y coordinates, z coordinates, layer no.)
 coordinates_O_2 = np.copy(np.hstack((coordC_x, coordC_y, coordC_z+1.275, layernno)))
 coordinates_O_2 = np.stack( sorted(coordinates_O_2, key=lambda x: -x[2]), axis=0 )
 
-# ============================ Create Cyclic-ether lattice ============================
+# ---------------------------------- Create Cyclic-ether lattice ----------------------------------
 
 # Replicate carbon lattice for cyclic-ether lattice 
 coordinates_O_3 = np.copy(coordinates)
 
-# ============================ Load epoxy lattice ============================
+# -------------------------------------- Load epoxy lattice ---------------------------------------
 
 f1=open("coordinates_O_%s_%d.cfg"%(str(size),no_of_layers),"r")
 file=f1.readlines()
@@ -1423,7 +1439,9 @@ sites_O_1 = len(coordinates_O_1) #Epoxy
 sites_O_2 = len(coordinates_O_2) #Carbonyl
 sites_O_3 = len(coordinates_O_3) #Cyclic-ether
 
-# ============================ Load Carbon & Epoxy lists ============================
+# ==================================================================================================
+#                                    Load Carbon & Epoxy lists
+# ==================================================================================================
 
 # Load dataframes
 output1 = pd.read_pickle("Carbon_%dx%d_%d.pkl"%(size,size,no_of_layers))
@@ -1448,7 +1466,7 @@ epoxy_O_split = list(output2['Epoxy O Split'])
 near_neigh_8 = list(output2['Near Neighbors 8'])
 near_neigh_O_7 = list(output2['Near Neighbors O 7'])
 
-# ============================ Print simulation details ============================
+# -------------------------------------- Print simulation details ---------------------------------
 
 print("For size %d"%size)
 print("For number of layers %d"%no_of_layers)
@@ -1457,7 +1475,9 @@ print("For Pressure: %d"%P_stag)
 print("Partial Pressure O: %s"%str(P_O))
 print("Partial Pressure O2: %s"%str(P_O2))
 
-# ============================ Reaction Categories ============================
+# ==================================================================================================
+#                                       Reaction Categories
+# ==================================================================================================
 
 # Adsorption of oxygen on basal plane
 Cat1=["Adsorption","Split O2 Adsorpiton"]
@@ -1493,13 +1513,15 @@ N2 = len(Category2)
 k1 = np.empty(N1, dtype=object) 
 k2 = np.empty(N2, dtype=object) 
 
-# ============================ Reaction Rates [s^-1] ============================
+# ==================================================================================================
+#                                      Reaction Rates [s^-1]
+# ==================================================================================================
 
-# -------------------------------------- Adsorption on basal plane --------------------------------------
+# -------------------------------------- Adsorption on basal plane --------------------------------
 k1[0] = ((P_O*A_eff)/np.sqrt(2*np.pi*m_O*k_b*T_g))*stick_coeff # Adsorption of O on basal plane as epoxy
 k1[1] = ((P_O2*A_eff)/np.sqrt(2*np.pi*2*m_O*k_b*T_g))*np.exp(-1.7/(k_b_ev*T_s))*stick_coeff  # Dissociation of O2 & adsorption as two epoxies on the basal plane
 
-# -------------------------------------- Desorption of epoxies --------------------------------------
+# -------------------------------------- Desorption of epoxies ------------------------------------
 k1[2] = (10**13)*np.exp(-1.130017/(k_b_ev*T_s)) # Recombination of two epoxies on the basal plane to desorb as O2
 
 # -------------------------------------- Diffusion reactions --------------------------------------
@@ -1512,7 +1534,7 @@ k1[10] = (10**13)*np.exp(-1.34/(k_b_ev*T_s)) # Epoxies shifting from Orientation
 k1[11] = (10**13)*np.exp(-0.95/(k_b_ev*T_s)) # Epoxy-ether group revert to two epoxies in Orientation 1
 k1[12] = (10**13)*np.exp(-1.1/(k_b_ev*T_s)) # Lacton-ether group formation from epoxy-ether group
 
-# -------------------------------------- Surface reactions --------------------------------------
+# -------------------------------------- Surface reactions ----------------------------------------
 k2[0] = (k_b*T_s/h)*np.exp(-0.97/(k_b_ev*T_s)) # CO formation from lactone-ether group
 k2[1] = (k_b*T_s/h)*np.exp(-0.5/(k_b_ev*T_s)) # CO formation from ether-latone-ether group
 k2[2] = (k_b*T_s/h)*np.exp(-0.61/(k_b_ev*T_s)) # CO2 formation from lactone-ether group
@@ -1523,7 +1545,7 @@ k2[6] = (k_b*T_s/h)*np.exp(-2.46/(k_b_ev*T_s)) # CO2 formation from lactone at v
 k2[7] = (k_b*T_s/h)*np.exp(-0.58/(k_b_ev*T_s)) # CO2 from lactone at vacancy in the presence of a epoxy
 k2[8] = (k_b*T_s/h) #Ether-lactone-ether formation from lactone-ether group in presence of epoxy
 
-# -------------------------------------- Defect edge reactions --------------------------------------
+# -------------------------------------- Defect edge reactions ------------------------------------
 k2[9] = (P_O2*A_eff)/np.sqrt(2*np.pi*2*m_O*k_b*T_g)*stick_coeff  # O2 adsorption on zigzag edge site 
 k2[10] = (P_O2*A_eff)/np.sqrt(2*np.pi*2*m_O*k_b*T_g)*np.exp(-0.311/(k_b_ev*T_s))*stick_coeff # O2 adsorption on armchair edge site 
 k2[11] = (P_O*A_eff)/np.sqrt(2*np.pi*m_O*k_b*T_g)*stick_coeff  # O adsorption on zigzag edge site 
@@ -1548,7 +1570,7 @@ k2[29] = 1.0*(10**13)*np.exp(-1.704/(k_b_ev*T_s)) # CO formation from carbonyl a
 k2[30] = 1.0*(10**13)*np.exp(-2.17/(k_b_ev*T_s)) # CO formation from single-bonded carbon site
 k2[31] = 1.0*(10**13)*np.exp(-0.447/(k_b_ev*T_s)) #CO formation from single-bonded carbon site, one epoxy present
 
-# -------------------------------------- Island removal reactions --------------------------------------
+# -------------------------------------- Island removal reactions ---------------------------------
 
 # Set island removal rate for islands containing between 2 & 35 carbon atoms
 for num in range(2,36):
@@ -1560,7 +1582,11 @@ k2 = k2.astype('float')
 k_const = np.concatenate(((k1,k2)), axis=0)
 
 
-# ============================ Site status (surface group flag, exposure and edge) ============================
+# ==================================================================================================
+#                                        Tracking sites
+# ==================================================================================================
+
+# ----------------------- Site status (surface group flag, exposure and edge) ----------------------
 
 cov_C = ['uncov' if coordinates[i][3]==0 else 'cov' for i in range(sites)]
 cov_ep = ['uncov' if coordinates_O_1[i][3]==0 else 'cov' for i in range(sites_O_1)]
@@ -1571,14 +1597,17 @@ flag_O_1 = ['pr' for i in range(sites_O_1)]
 flag_O_2 = ['pr' for i in range(sites_O_2)]
 flag_O_3 = ['na' for i in range(sites_O_3)]
 
-# ============================ Arrays to track available sites for each reaction ============================
+# ----------------------- Arrays to track available sites for each reaction ------------------------
+
 changing_av_ad = np.zeros((sites_O_2,N2))
 changing_av_ep = np.zeros((sites_O_1,N1))
 
 sites_av_ad = [[] for i in range(N2)]
 sites_av_ep = [[] for i in range(N1)]
 
-# ============================ Initialization ============================
+# ==================================================================================================
+#                                         Initialization
+# ==================================================================================================
 
 offset_t=0
 offset_step=0
@@ -1605,28 +1634,31 @@ sur_av = sur_av_ep.tolist()+sur_av_ad.tolist()
 counter_cat = [float(0)]*len(sur_av)
 
 
-# ============================ Re-run simulation from previous run ============================
-"""
+# ----------------------------- Re-run simulation from previous run --------------------------------
 
+"""
 # output3 = pd.read_pickle("Df_temp%d_19_7_22_%dPa_%dK_%s_%d_%d.pkl"%(set_,P_stag,T_g,str(size), no_of_layers, restart_timestep))
 # flag, flag_O_1, flag_O_2, flag_O_3, offset_t, offset_step, offset_full, changing_av_ad, changing_av_ep, site_O_before, site_before, sur_av_ad, sur_av_ep, edge_C, cat,prob,cov_C,cov_ep,counter_cat = ((output3.tail(1)).values.tolist())[0]
-
 """
 
-# ============================ Initialize timestep and iteration ============================
+# ------------------------------ Initialize timestep and iteration ---------------------------------
+
 t = offset_t # Physical time
 time_step = int(offset_step) # KMC iteration
 
-# ============================ Begin KMC simualtion ============================
+
+# ==================================================================================================
+#                                       Begin KMC simualtion
+# ==================================================================================================
 
 # Run until no more reactions are available
 while cat!=-1:
 
 	time1 = time.time()
 
-	# --------------------------------- Find available sites ----------------------------------------
+	# +++++++++++++++++++++++++++++++++++ [1] Find available sites +++++++++++++++++++++++++++++++++++
 
-	# --------------------------------- Reactions in Category 1 ----------------------------------------
+	# ----------------------------------- Reactions in Category 1 ------------------------------------
 
 	# Identify epoxy sites within 7 neighbors of the previous epoxy site where the last reaction occurred.
 	pool_ep=[]
@@ -1766,7 +1798,7 @@ while cat!=-1:
 
 		epoxy_rit(site_O)
 
-	# --------------------------------- Reactions in Category 2 ----------------------------------------
+	# --------------------------------- Reactions in Category 2 --------------------------------------
 
 	# Identify epoxy sites within 8 neighbors of the previous carbon site where the last reaction occurred.
 	pool_ad=[]
@@ -1837,7 +1869,7 @@ while cat!=-1:
 		
 		edge_C_site_type,edge_C_list = what_edge_carbon_is_it(site) # get edge type
 
-		# ---------------------------- Islands ---------------------------------------------
+		# -------------------------------------- Islands ---------------------------------------------
 		add_chain = [x for x in near_neigh[site] if flag[x]!=['dg']]
 		chain = [site] + add_chain
 		while len(add_chain)!=0:
@@ -1860,7 +1892,7 @@ while cat!=-1:
 		else:
 			pass
 
-		# ---------------------------------------------------------------------------------
+		# ---------------------------------------------------------------------------------------------
 
 		if any(i in ['la-vac','cyc-eth'] for i in flag[site])!=True:
 			if flag[site] ==['pr'] and cov_C[site]=='uncov':
@@ -1962,11 +1994,12 @@ while cat!=-1:
 	# Tally reaction rates (k * n)
 	rates = np.absolute(np.einsum('i,i->i',k_const,sur_av))
 	R = np.einsum('i,i->',k_const,sur_av)
+	
+	# +++++++++++++++++++++++++++ [2] Choose reaction based on probabilities +++++++++++++++++++++++++
 
 	if R != 0:
 
-		# -------- Choose reaction based on probability determined from rates ------
-
+		# Probabilities determined from reaction rates
 		prob = [i/R for i in rates]
 		#print("Probability:")
 		#print(["%.15f|%s"%(prob[i], Category[i]) if prob[i]!=0 else 0 for i in range(len(sur_av))])
@@ -1980,8 +2013,8 @@ while cat!=-1:
 
 	site_O_before= 'na'
 	site_before= 'na'
-
-	# ------------- Choose epoxy site if chosen reaction in Category 1 -----------------------
+	
+	# --------------------- Choose epoxy site if chosen reaction in Category 1 -----------------------
 
 	if cat<N1 and cat>1:
 		site_O = np.random.choice(np.where(changing_av_ep[:,cat]==1)[0])
@@ -2043,8 +2076,8 @@ while cat!=-1:
 			common_C,ether_C,epox_C,ether_O,epox_O,opp_ad_c,ether_C_side_C,cyc_eth_C = epoxy_ether(site_O)
 		else:
 			pass
-	
-	# ------------- Choose carbon site if chosen reaction in Category 2 -----------------------
+
+	# ---------------------- Choose carbon site if chosen reaction in Category 2 ---------------------
 
 	elif cat>(N1-1) and cat< len(sur_av)-1:
 		site = np.random.choice(np.where(changing_av_ad[:,cat-N1]==1)[0])
@@ -2112,7 +2145,7 @@ while cat!=-1:
 	else:
 		pass
 
-	# --------------------- Perform chosen reaction -------------------------------
+	# +++++++++++++++++++++++++++++++++++ [3] Perform chosen reaction ++++++++++++++++++++++++++++++++
 
 	if cat == 0: # Adsoprtion O
 		site_O = np.random.choice(np.where(changing_av_ep[:,cat]==1)[0])
@@ -2264,7 +2297,6 @@ while cat!=-1:
 		pass
 
 	# Remove cyclic-ethers if part of island
-
 	for site in cyc_ethers:
 		attach_C = [p for p in near_neigh[site] if 'cyc-eth' in flag[p]]
 
@@ -2292,7 +2324,8 @@ while cat!=-1:
 		else:
 			pass
 
-	# --------------------------------------- Save simulation data -----------------------------------------------
+	# ------------------------------------- Save simulation data -------------------------------------
+
 	if time_step%1000000==0:
 		# Save every 1000000 KMC iterations
 		df1_4 = pd.DataFrame([[flag, flag_O_1, flag_O_2, flag_O_3, t,time_step, int(offset_full)+(time.time() - start_time), changing_av_ad, changing_av_ep, site_O_before, site_before, sur_av_ad, sur_av_ep, edge_C, cat,prob,cov_C,cov_ep,counter_cat]])
@@ -2310,14 +2343,16 @@ while cat!=-1:
 		df1_4 = pd.DataFrame([[flag, flag_O_1, flag_O_2, flag_O_3,t,time_step, int(offset_full)+(time.time() - start_time), changing_av_ad, changing_av_ep, site_O_before, site_before, sur_av_ad, sur_av_ep, edge_C, cat,prob,cov_C,cov_ep,counter_cat]])
 		df1_4.to_pickle("./Df_restart_%dPa_%dK_%s_%d_%d.pkl"%(P_stag,T_g,str(size), no_of_layers, time_step))
 
+	# +++++++++++++++++++++++++++++++++++++ [4] Update physical time +++++++++++++++++++++++++++++++++
+
 	if R!=0:
-		# Update physical time
 		r1 = random.random()
 		t += -(np.log(r1))/(R*1.0)
 	else:
 		pass
 	
-	# ---------------------- Print computational time per iteration -----------------------------
+	# --------------------------- Print computational time per iteration -----------------------------
+
 	#timestep_end = time.time()
 	#print("Time for timestep: %s seconds"%str(timestep_end -time1))
 	#print("Time Elapsed: %s mins"%str((time.time() - start_time)/60))
@@ -2325,7 +2360,10 @@ while cat!=-1:
 
 	time_step +=1
 
-# ---------------------- Print simulation data -----------------------------
+
+# ==================================================================================================
+#                                       Print simulation data
+# ==================================================================================================
 
 print(color.BOLD + color.DARKCYAN + "Real Time:" + color.END + " %s secs"%"{:.2e}".format(t))
 time_full = (time.time() - start_time)
