@@ -1,6 +1,11 @@
-In this script, an atomic scale multi-lattice KMC approach is used to model defect generation in multi-layer graphene due to adsorption and diffusion of oxygen. Simulations based on this KMC model reveal details of the pitting process driven by atomic oxygen in multi-layer graphene for specific temperatures and partial pressures of atomic and molecular oxygen. The model is developed using separate, interacting lattices for the carbon and oxygen sites. The carbon lattice includes all possible carbon sites in a multilayer graphene structure representative of an HOPG material. In every time step of the simulation, a change in the state of a site in the oxygen lattice affects the possible states of the neighboring sites in the carbon lattice. The use of separate lattices makes it possible to effectively distinguish the oxygen and carbon sites and allow them to communicate throughout the simulation as various chemical interactions are tracked. The model implemented here consists of 20 surface reactions and 23 reactions on graphene edge sites, for a total of 43 reactions.
+## Atomistic kinetic Monte Carlo (A-kMC) model containting reactions that lead to the formation of defects from a pristine surface. 
+# Aug 2020 - Dec 2021
+
+The model is developed using separate, interacting lattices for the carbon and oxygen sites. The carbon lattice includes all possible carbon sites in a multilayer graphene structure representative of an HOPG material. The use of separate lattices makes it possible to effectively distinguish the oxygen and carbon sites and allow them to communicate throughout the simulation as various chemical interactions are tracked. 
 
 First run KMC_initialization.py to get the 'Carbon_#x#_#.pkl' and 'Epoxies_#x#_#.pkl'
+
+Make sure
 
 Next run KMC.py:
 
