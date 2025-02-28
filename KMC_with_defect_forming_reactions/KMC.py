@@ -10,32 +10,32 @@ import cantera as ct
 start_time = time.time()
 
 class color:
-   """
-    This function defines colors for text while printing
-    """
+	"""
+	This function defines colors for text while printing
+	"""
 
-   PURPLE = '\033[95m'
-   CYAN = '\033[96m'
-   DARKCYAN = '\033[36m'
-   BLUE = '\033[94m'
-   GREEN = '\033[92m'
-   YELLOW = '\033[93m'
-   RED = '\033[91m'
-   BOLD = '\033[1m'
-   UNDERLINE = '\033[4m'
-   END = '\033[0m'
+	PURPLE = '\033[95m'
+	CYAN = '\033[96m'
+	DARKCYAN = '\033[36m'
+	BLUE = '\033[94m'
+	GREEN = '\033[92m'
+	YELLOW = '\033[93m'
+	RED = '\033[91m'
+	BOLD = '\033[1m'
+	UNDERLINE = '\033[4m'
+	END = '\033[0m'
 
 def within_4_neighs(site):
 
 	"""
-    This function finds neighboring sites to 'site' within four near neighbors.
+	This function finds neighboring sites to 'site' within four near neighbors.
 
-    Parameters:
-    site (int): carbon site index
+	Parameters:
+	site (int): carbon site index
 
-    Returns:
-    list: list of indices of near neighbors
-    """
+	Returns:
+	list: list of indices of near neighbors
+	"""
 
 	all_C = []
 	all_C_1 = []
@@ -55,18 +55,18 @@ def within_4_neighs(site):
 
 def periodic(site_a,site_b,coord_list,max_x,max_y):
 	"""
-    This function computes the distance between site_a & site_b given the periodicity of the graphene sheets.
+	This function computes the distance between site_a & site_b given the periodicity of the graphene sheets.
 
-    Parameters:
-    site_a (int): carbon or epoxy site index
+	Parameters:
+	site_a (int): carbon or epoxy site index
 	site_b (int): carbon or epoxy site index
 	coord_list (array): epoxy or carbon coordinate array
 	max_x (float): maximum x value in coord_list
 	max_y (float): maximum y value in coord_list
 
-    Returns:
-    float: The distance between site_a & site_b given periodicity.
-    """
+	Returns:
+	float: The distance between site_a & site_b given periodicity.
+	"""
 
 	dist_x = abs(coord_list[site_a][0]-coord_list[site_b][0])
 	dist_y = abs(coord_list[site_a][1]-coord_list[site_b][1])
