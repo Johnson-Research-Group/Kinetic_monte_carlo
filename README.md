@@ -1,5 +1,5 @@
 # Hyperthermal Oxidation of Graphite using Atomistic kinetic Monte Carlo (A-kMC) Simulations
-An Atomistic kinetic Monte Carlo model is used to simulate defect generation in multi-layer graphene due to atomic and molecular oxygen. The purpose of these simulations is to study the erosion of Thermal Protection System (TPS) materials at high temperatures during space reentry to earth. 
+An atomistic kinetic Monte Carlo model is used to simulate defect generation in multi-layer graphene due to atomic and molecular oxygen. The purpose of these simulations is to study the erosion of Thermal Protection System (TPS) materials at high temperatures during space reentry to earth. 
 
 Simulations based on this KMC model reveal details of the pitting process driven by oxygen adsorption and surface diffusion in multi-layer graphene for specific temperatures and partial pressures of atomic and molecular oxygen. 
 
