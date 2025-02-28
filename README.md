@@ -3,7 +3,6 @@ An Atomistic kinetic Monte Carlo model is used to simulate defect generation in 
 
 Simulations based on this KMC model reveal details of the pitting process driven by oxygen adsorption and surface diffusion in multi-layer graphene for specific temperatures and partial pressures of atomic and molecular oxygen. The model implemented here consists of 43 reactions between carbon and oxygen, categorized as adsorption, diffusion, surface and gasification reactions. The following figures shows the oxidation of graphite consisting of five graphene layers at 1700 K and 10kPa.
 
-![Image](Images/oxidation_1700K_10kPa.png)
 <img src="Images/oxidation_1700K_10kPa.png" width="300" height="200">
 
 As the temperature increases from 1300 K to 2200 K, the shape of the defects transitions from hexagonal to branched. This change is attributed to the preferential desorption of carbonyl groups from certain edge sites as the temperature rises.
