@@ -1652,7 +1652,7 @@ time_step = int(offset_step) # KMC iteration
 # ==================================================================================================
 
 # Run until no more reactions are available
-while cat!=-1:
+while time_step<10:#cat!=-1:
 
 	time1 = time.time()
 
