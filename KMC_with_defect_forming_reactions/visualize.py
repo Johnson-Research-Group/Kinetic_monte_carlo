@@ -1,12 +1,9 @@
 import matplotlib.pyplot as plt
 import numpy as np
-import time
 import math
 import pandas as pd
 import glob
-import os
 import re
-import sys
 import argparse
 
 def parseArguments():
@@ -218,7 +215,7 @@ if center!=-1:
 	coordinates_O_3[:,1][coordinates_O_3[:,1]<limit_y]+= max_C_y
 
 # ==================================================================================================
-#                                    Visualize KMC simulations
+#                                     Get simulation statistics
 # ==================================================================================================
 
 

@@ -23,19 +23,29 @@ Python file KMC_initialization.py takes as input 'size' and 'no_of_layers' as in
 
 ## How to use
 
-- Ensure that 'Carbon_#x#_#.pkl', 'Epoxies_#x#_#.pkl', 'coordinates_#_#.cfg' and 'coordinates_O_#_#.cfg' are in the same folder with pyhton scripts.
-- Run KMC.py '# graphene sheet size (int)' '# no. of graphene layers (int)' 'temperature (int)' 'pressure (int)' 'iterations to run (int)' '
-- Run write_to_files.py to visualize simulation as LAMMPS dump files
+- Clone this github repository
+- Run KMC.py with the necessary arguments to run the A-kMC simulation.
+- Run visualize.py with the necessary arguments to visualize simulation as LAMMPS dump files.
+- Run statistics.py with the necessary arguments to get simulation statistics.
 
 ## Example
 
 ```bash
-$ python KMC.py 20 5 2200 10000
+$ python KMC.py 20 5 2200 10000 --save 1000000 --walltime_max 4.5
 ```
-This will generate 'Df_#Pa_#K_#_#_#.pkl' files that will then be used for visualization and analysis.
+This will generate 'Df_#Pa_#K_#_#_#.pkl' files in the Dataframes folder that will then be used for visualization and analysis.
 
 To visualize these files run,
 
 ```bash
-$ python visualize.py 20 5 10000000 1000000 4.5
+$ python visualize.py 20 5 2200 10000 --center 170
 ```
+This will generate 'Sim_#Pa_#K_#_#_#.pkl' files in the Results folder that can be visualized in Ovito.
+
+To get simulation statistics run,
+
+```bash
+$ python visualize.py 20 5 2200 10000 > ./Results/output.txt
+```
+Details of the simulation such as adsorption and CO formaiton statistics will be recorded in the Results folder.
+

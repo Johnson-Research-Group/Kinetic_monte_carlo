@@ -34,6 +34,17 @@ def numericalSort(value):
     return parts
 
 def what_edge_carbon_is_it(site):
+
+	"""
+	This function determines what edge type 'site' is based on neighboring sites (zigzag, armchair, double zigzag, triple zigzag, sibgle-bonded carbon, island site, or not in edge).
+
+	Parameters:
+	site (int): carbon site index
+
+	Returns:
+	string: "ZZ" - zigzag, "AC" - armchair, "DZZ" - double zigzag, "TZZ" - triple zigzag, "SBC" - single-bonded carbon, "Island" - island site, "Not in edge" - basal plane site
+	"""
+
 	list_n =[]
 	if edge_C[site] =='edg':
 		list_n = [l for l in near_neigh[site] if flag[l] != ['dg']]

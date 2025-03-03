@@ -24,7 +24,6 @@ def parseArguments():
 	parser.add_argument("no_of_layers", help="no. of graphene sheets", type=int)
 	parser.add_argument("temp", help="gas temperature", type=float)
 	parser.add_argument("pressure", help="gas mixture pressure", type=float)
-	parser.add_argument("itr_final", help="maximum KMC iterations", type=int)
 
 	parser.add_argument("-ts", "--temp_surface", help="temperature of surface", type=float)
 	parser.add_argument("-s", "--save", help="iterations to save file", type=int, default=1000000)
@@ -1345,9 +1344,6 @@ size = args.size
 # No. of graphene layers
 no_of_layers = args.no_of_layers
 
-# KMC iterations to run
-itr_final = args.itr_final
-
 # KMC iterations to save
 itr_save = args.save
 
@@ -1693,7 +1689,7 @@ time_step = int(offset_step) # KMC iteration
 # ==================================================================================================
 
 # Run until no more reactions are available
-while time_step<itr_final:
+while cat!=-1:
 
 	time1 = time.time()
 
