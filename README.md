@@ -20,8 +20,6 @@ Please refer to the citations listed for more information.
 
 ## Projects in this repository
 - Atomistic-kinetic Monte Carlo (A-kMC), with defect forming reactions
-- Atomistic-kinetic Monte Carlo (A-kMC), without defect forming reactions
-- Direct Simulation Monte Carlo coupled with Atomistic-kinetic Monte Carlo
 
 ### References
 [1] Edward, Sharon, and Harley Johnson. "Atomistic Multi-Lattice Kinetic Monte Carlo (KMC) Modeling of Hyperthermal Oxidation of Multi-Layer Graphene." AIAA SCITECH 2022 Forum. 2022.
