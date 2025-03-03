@@ -1322,7 +1322,7 @@ itr_final = int(sys.argv[3])
 itr_save = int(sys.argv[4])
 
 # Maximum walltime
-walltime_max = int(sys.argv[5])
+walltime_max = float(sys.argv[5])
 
 # Constants
 k_b_ev = 8.6173 * 10**(-5) # Boltzmann's constant [eV K^-1]

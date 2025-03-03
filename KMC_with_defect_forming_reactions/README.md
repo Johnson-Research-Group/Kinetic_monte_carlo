@@ -4,11 +4,11 @@
 The model is developed using separate, interacting lattices for the carbon and oxygen sites. The carbon lattice includes all possible carbon sites in a multilayer graphene structure representative of an HOPG material. The use of separate lattices makes it possible to effectively distinguish the oxygen and carbon sites and allow them to communicate throughout the simulation as various chemical interactions are tracked. 
 
 ## Required python packages
-- NumPy
-- Pandas
-- Cantera
-- Matplotlib
-- Sys
+- numPy
+- pandas
+- cantera
+- matplotlib
+- sys
 
 ## Required data
 
@@ -24,12 +24,10 @@ Python file KMC_initialization.py takes as input 'size' and 'no_of_layers' as in
 ## How to use
 
 - Ensure that 'Carbon_#x#_#.pkl', 'Epoxies_#x#_#.pkl', 'coordinates_#_#.cfg' and 'coordinates_O_#_#.cfg' are in the same folder with pyhton scripts.
-- Run KMC.py '# graphene sheet size (int)' '# no. of graphene layers (int)' 'maximum iterations (int)' 'iterations to save files (int)' 'maximum walltime (int)'
+- Run KMC.py '# graphene sheet size (int)' '# no. of graphene layers (int)' 'maximum iterations (int)' 'iterations to save files (int)' 'maximum walltime (float)'
 - Run write_to_files.py to visualize simulation as LAMMPS dump files
 
 ## Example
 
 ```bash
-# This is a terminal command
-$ echo "Hello, World!"
-Hello, World!
+$ python3 KMC.py 20 5 10000000 1000000 4.5
