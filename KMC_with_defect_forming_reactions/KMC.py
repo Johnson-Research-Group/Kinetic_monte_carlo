@@ -6,7 +6,6 @@ import itertools
 from itertools import chain
 import pandas as pd
 import cantera as ct
-import sys
 import argparse
 
 start_time = time.time()
