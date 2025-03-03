@@ -225,7 +225,7 @@ for name in dfs:
 	output = pd.read_pickle(name)
 
 	# Load dataframe
-	flag, flag_O_1,flag_O_2, flag_O_3,t, time_step, t_wall, changing_av_ad, changing_av_ep, site_O_before, site_before, site_ad, site_ep, edge_C, cov_C, cov_ep, counter_cat = ((output.tail(1)).values.tolist())[0]
+	flag, flag_O_1, flag_O_2, flag_O_3, t, time_step, t_wall, edge_C, cov_C,cov_ep,counter_cat = ((output.tail(1)).values.tolist())[0]
 
 	print("============================== KMC Iteration %d =================================="%time_step)
 
@@ -251,7 +251,7 @@ for name in dfs:
 
 	f = open("./Results/Sim_%dPa_%dK_%s_%d_%d.pkl"%(P_stag,T_g,str(size), no_of_layers, time_step), "w")
 	f.write("ITEM: TIMESTEP\n")
-	f.write("%d\n"%offset_step)
+	f.write("%d\n"%time_step)
 	f.write("ITEM: NUMBER OF ATOMS\n")
 	f.write("%d\n"%(sites_itr+sites_itr_O_1+sites_itr_O_2+sites_itr_O_3))#+sites_itr_O))
 	f.write("ITEM: BOX BOUNDS pp pp ff\n")

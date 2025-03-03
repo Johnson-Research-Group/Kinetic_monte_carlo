@@ -21,12 +21,13 @@ def parseArguments():
 	# required
 	parser.add_argument("size", help="graphene sheet size", type=int)
 	parser.add_argument("no_of_layers", help="no. of graphene sheets", type=int)
-	parser.add_argument("temp", help="gas temperature", type=float)
-	parser.add_argument("pressure", help="gas mixture pressure", type=float)
+	parser.add_argument("temp", help="gas temperature [K]", type=float)
+	parser.add_argument("pressure", help="gas mixture pressure [Pa]", type=float)
 
-	parser.add_argument("-ts", "--temp_surface", help="temperature of surface", type=float)
+	parser.add_argument("-ts", "--temp_surface", help="temperature of surface [K]", type=float)
 	parser.add_argument("-s", "--save", help="iterations to save file", type=int, default=1000000)
-	parser.add_argument("-wt", "--walltime_max", help="maximum walltime", type=float, default=48)
+	parser.add_argument("-wt", "--walltime_max", help="maximum walltime [hrs]", type=float, default=48)
+	parser.add_argument("-res", "--restart_iteration", help="re-run simulation srtating from this iteration", type=int, default=-1)
 
 	# Parse arguments
 	args = parser.parse_args()
@@ -1672,10 +1673,11 @@ counter_cat = [float(0)]*len(sur_av)
 
 # ----------------------------- Re-run simulation from previous run --------------------------------
 
-"""
-# output3 = pd.read_pickle("Df_temp%d_19_7_22_%dPa_%dK_%s_%d_%d.pkl"%(set_,P_stag,T_g,str(size), no_of_layers, restart_timestep))
-# flag, flag_O_1, flag_O_2, flag_O_3, offset_t, offset_step, offset_full, changing_av_ad, changing_av_ep, site_O_before, site_before, sur_av_ad, sur_av_ep, edge_C, cat,prob,cov_C,cov_ep,counter_cat = ((output3.tail(1)).values.tolist())[0]
-"""
+restart_iteration = args.restart_iteration
+if restart_iteration!=-1:
+	output_res = pd.read_pickle("./Dataframes/Df_restart_%dPa_%dK_%s_%d_%d.pkl"%(P_stag,T_g,str(size), no_of_layers, restart_iteration))
+	flag, flag_O_1, flag_O_2, flag_O_3, offset_t, offset_step, offset_full, changing_av_ad, changing_av_ep, site_O_before, site_before, sur_av_ad, sur_av_ep, edge_C, cat,prob,cov_C,cov_ep,counter_cat = ((output_res.tail(1)).values.tolist())[0]
+
 
 # ------------------------------ Initialize timestep and iteration ---------------------------------
 
@@ -2380,7 +2382,7 @@ while cat!=-1:
 		print("Maximum walltime limit exceeded")
 		print(" ========= KMC Iteration = %d ==========" %time_step)
 		checker=1
-		df1_4 = pd.DataFrame([[flag, flag_O_1, flag_O_2, flag_O_3,t,time_step, int(offset_full)+(time.time() - start_time), edge_C, cov_C,cov_ep,counter_cat]])
+		df1_4 = pd.DataFrame([[flag, flag_O_1, flag_O_2, flag_O_3,t,time_step, int(offset_full)+(time.time() - start_time), changing_av_ad, changing_av_ep, site_O_before, site_before, sur_av_ad, sur_av_ep, edge_C, cat,prob, cov_C,cov_ep,counter_cat]])
 		df1_4.to_pickle("./Dataframes/Df_restart_%dPa_%dK_%s_%d_%d.pkl"%(P_stag,T_g,str(size), no_of_layers, time_step))
 
 	# +++++++++++++++++++++++++++++++++++++ [4] Update physical time +++++++++++++++++++++++++++++++++

@@ -24,16 +24,22 @@ Python file KMC_initialization.py takes as input 'size' and 'no_of_layers' as in
 ## Description of scripts
 
 ### KMC.py
-This script runs the A-kMC simulation with the following arguments
-- size of graphene sheets
+This script runs the A-kMC simulation with the following arguments:
+_____________________________________
+| Parameter | Description | Default |
+|-----------|-------------|---------|
+| size of graphene sheets
 - no. of graphene layers
-- temperature of gas
-- pressure of gas mixture
-- temperature of graphite surface
-- no. of iterations to save files
-- maximum walltime
+- temperature of gas [K]
+- pressure of gas mixture [Pa]
+- temperature of graphite surface [K] (optional)
+- no. of iterations to save files (optional)
+- maximum walltime [hrs] (optional)
+- restart iteration (optional)
 
+If a maximum walltime is specified, the script will run until it is reached and save a restart simulation file at the corresponding KMC iteration (to re-run the script from the last run KMC iteration). If a maximum walltime is not provided, no simulation file is saved at the corresponding iteration.
 
+If a restart iteration is provided, KMC.py will run an A-kMC simulation starting at the state saved in './Dataframes/Df_restart_#Pa_#K_#_#_restart_iteration.pkl'
 
 ## How to use
 
