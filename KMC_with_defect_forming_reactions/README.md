@@ -24,12 +24,18 @@ Python file KMC_initialization.py takes as input 'size' and 'no_of_layers' as in
 ## How to use
 
 - Ensure that 'Carbon_#x#_#.pkl', 'Epoxies_#x#_#.pkl', 'coordinates_#_#.cfg' and 'coordinates_O_#_#.cfg' are in the same folder with pyhton scripts.
-- Run KMC.py '# graphene sheet size (int)' '# no. of graphene layers (int)' 'maximum iterations (int)' 'iterations to save files (int)' 'maximum walltime (float)'
+- Run KMC.py '# graphene sheet size (int)' '# no. of graphene layers (int)' 'temperature (int)' 'pressure (int)' 'iterations to run (int)' '
 - Run write_to_files.py to visualize simulation as LAMMPS dump files
 
 ## Example
 
 ```bash
-$ python3 KMC.py 20 5 10000000 1000000 4.5
+$ python KMC.py 20 5 2200 10000
 ```
-This will generate
+This will generate 'Df_#Pa_#K_#_#_#.pkl' files that will then be used for visualization and analysis.
+
+To visualize these files run,
+
+```bash
+$ python visualize.py 20 5 10000000 1000000 4.5
+```

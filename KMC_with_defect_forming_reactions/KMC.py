@@ -7,10 +7,36 @@ from itertools import chain
 import pandas as pd
 import cantera as ct
 import sys
+import argparse
 
 start_time = time.time()
 
+def parseArguments():
+
+	"""
+	This function creates argument parser
+	"""
+
+	parser = argparse.ArgumentParser()
+
+	# required
+	parser.add_argument("size", help="graphene sheet size", type=int)
+	parser.add_argument("no_of_layers", help="no. of graphene sheets", type=int)
+	parser.add_argument("temp", help="gas temperature", type=float)
+	parser.add_argument("pressure", help="gas mixture pressure", type=float)
+	parser.add_argument("itr_final", help="maximum KMC iterations", type=int)
+
+	parser.add_argument("-ts", "--temp_surface", help="temperature of surface", type=float)
+	parser.add_argument("-s", "--save", help="iterations to save file", type=int, default=1000000)
+	parser.add_argument("-wt", "--walltime_max", help="maximum walltime", type=float, default=48)
+
+	# Parse arguments
+	args = parser.parse_args()
+
+	return args
+
 class color:
+
 	"""
 	This function defines colors for text while printing
 	"""
@@ -1309,20 +1335,24 @@ def SBC_ep_CO(site):
 #                                        Parameters
 # ============================================================================================
 
+args = parseArguments()
+if args.temp_surface is None:
+    args.temp_surface = args.temp
+
 # Size unit of graphene sheets
-size = int(sys.argv[1])
+size = args.size
 
 # No. of graphene layers
-no_of_layers = int(sys.argv[2])
+no_of_layers = args.no_of_layers
 
 # KMC iterations to run
-itr_final = int(sys.argv[3])
+itr_final = args.itr_final
 
 # KMC iterations to save
-itr_save = int(sys.argv[4])
+itr_save = args.save
 
 # Maximum walltime
-walltime_max = float(sys.argv[5])
+walltime_max = args.walltime_max
 
 # Constants
 k_b_ev = 8.6173 * 10**(-5) # Boltzmann's constant [eV K^-1]
@@ -1334,8 +1364,9 @@ A_eff = 2.6199 * (10**-20) # Effective area for oxygen adsorption [m^2]
 
 # Parameters
 stick_coeff = 1 # Sticking coefficient of oxygen atoms for adsorption
-T_s = T_g = 1500 # Temperature of surface and gas [K]
-P_stag = 10000 # Pressure of gas mixture [Pa]
+T_g = args.temp # Temperature of gas [K]
+T_s = args.temp_surface # Temperature of surface [K]
+P_stag = args.pressure # Pressure of gas mixture [Pa]
 
 # Create cantera Solution object to represent a gas mixture gas1
 gas1 = ct.Solution('gri30.yaml')
@@ -2338,24 +2369,24 @@ while time_step<itr_final:
 
 	if time_step%itr_save==0:
 		# Save every 1000000 KMC iterations
-		df1_4 = pd.DataFrame([[flag, flag_O_1, flag_O_2, flag_O_3, t,time_step, int(offset_full)+(time.time() - start_time), changing_av_ad, changing_av_ep, site_O_before, site_before, sur_av_ad, sur_av_ep, edge_C, cat,prob,cov_C,cov_ep,counter_cat]])
-		df1_4.to_pickle("./Df_%dPa_%dK_%s_%d_%d.pkl"%(P_stag,T_g,str(size), no_of_layers, time_step))
+		df1_4 = pd.DataFrame([[flag, flag_O_1, flag_O_2, flag_O_3, t,time_step, int(offset_full)+(time.time() - start_time), edge_C, cov_C,cov_ep,counter_cat]])
+		df1_4.to_pickle("./Dataframes/Df_%dPa_%dK_%s_%d_%d.pkl"%(P_stag,T_g,str(size), no_of_layers, time_step))
 		print(" ========= KMC Iteration = %d ==========" %time_step)
 	
 	if cat==-1:
 		# Save at last iteration
 		print("All carbon atoms are removed")
 		print(" ========= Final KMC Iteration = %d ==========" %time_step)
-		df1_4 = pd.DataFrame([[flag, flag_O_1, flag_O_2, flag_O_3, t,time_step, int(offset_full)+(time.time() - start_time), changing_av_ad, changing_av_ep, site_O_before, site_before, sur_av_ad, sur_av_ep, edge_C, cat,prob,cov_C,cov_ep,counter_cat]])
-		df1_4.to_pickle("./Df_%dPa_%dK_%s_%d_%d.pkl"%(P_stag,T_g,str(size), no_of_layers, time_step))
+		df1_4 = pd.DataFrame([[flag, flag_O_1, flag_O_2, flag_O_3, t,time_step, int(offset_full)+(time.time() - start_time), edge_C, cov_C,cov_ep,counter_cat]])
+		df1_4.to_pickle("./Dataframes/Df_%dPa_%dK_%s_%d_%d.pkl"%(P_stag,T_g,str(size), no_of_layers, time_step))
 
 	if (time.time() - start_time)/3600 >walltime_max and checker==0:
 		# Save after a certain amount of simulation time has passed
 		print("Maximum walltime limit exceeded")
 		print(" ========= KMC Iteration = %d ==========" %time_step)
 		checker=1
-		df1_4 = pd.DataFrame([[flag, flag_O_1, flag_O_2, flag_O_3,t,time_step, int(offset_full)+(time.time() - start_time), changing_av_ad, changing_av_ep, site_O_before, site_before, sur_av_ad, sur_av_ep, edge_C, cat,prob,cov_C,cov_ep,counter_cat]])
-		df1_4.to_pickle("./Df_restart_%dPa_%dK_%s_%d_%d.pkl"%(P_stag,T_g,str(size), no_of_layers, time_step))
+		df1_4 = pd.DataFrame([[flag, flag_O_1, flag_O_2, flag_O_3,t,time_step, int(offset_full)+(time.time() - start_time), edge_C, cov_C,cov_ep,counter_cat]])
+		df1_4.to_pickle("./Dataframes/Df_restart_%dPa_%dK_%s_%d_%d.pkl"%(P_stag,T_g,str(size), no_of_layers, time_step))
 
 	# +++++++++++++++++++++++++++++++++++++ [4] Update physical time +++++++++++++++++++++++++++++++++
 
@@ -2379,9 +2410,9 @@ while time_step<itr_final:
 #                                       Print simulation data
 # ==================================================================================================
 
-print(color.BOLD + color.DARKCYAN + "Real Time:" + color.END + " %s secs"%"{:.2e}".format(t))
+print(color.BOLD + color.DARKCYAN + "Physical Time:" + color.END + " %s secs"%"{:.2e}".format(t))
 time_full = (time.time() - start_time)
-print(color.BOLD + color.DARKCYAN + "Simulation Time:" + color.END + " %.7f secs"%(int(offset_full)+time_full))
+print(color.BOLD + color.DARKCYAN + "Wall Time:" + color.END + " %.7f secs"%(int(offset_full)+time_full))
 print()
 print(" ========= Number of reaction occurences ========= ")
 for cat in range(len(Category)):
