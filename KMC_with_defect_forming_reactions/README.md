@@ -28,14 +28,14 @@ This script runs the A-kMC simulation with the following arguments:
 _____________________________________
 | Parameter | Description | Default |
 |-----------|-------------|---------|
-| 'size' | size of graphene sheets | required |
-| 'no_of_layers' | no. of graphene layers | required |
-| 'temp' | temperature of gas [K] | required |
-| 'pressure' |pressure of gas mixture [Pa] | required |
-| 'temp_surface' | temperature of graphite surface [K] | 'temp' |
-| 'save' | no. of iterations to save files | 1000000 |
-| 'walltime_max' | maximum walltime after which simulation stops [hrs] | 48 |
-| 'restart_iteration' | last run iteration to restart simulation from | -1 |
+| `size` | size of graphene sheets | required |
+| `no_of_layers` | no. of graphene layers | required |
+| `temp` | temperature of gas [K] | required |
+| `pressure` |pressure of gas mixture [Pa] | required |
+| `temp_surface` | temperature of graphite surface [K] | `temp` |
+| `save` | no. of iterations to save files | 1000000 |
+| `walltime_max` | maximum walltime after which simulation stops [hrs] | 48 |
+| `restart_iteration` | last run iteration to restart simulation from | -1 |
 
 If a maximum walltime is specified, the script will run until it is reached and save a restart simulation file at the corresponding KMC iteration (to re-run the script from the last run KMC iteration). If a maximum walltime is not provided, no simulation file is saved at the corresponding iteration.
 
