@@ -31,3 +31,5 @@ Python file KMC_initialization.py takes as input 'size' and 'no_of_layers' as in
 
 ```bash
 $ python3 KMC.py 20 5 10000000 1000000 4.5
+
+This will generate
