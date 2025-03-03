@@ -21,6 +21,20 @@ coordinates_#_#.cfg & coordinates_O_#_#.cfg for carbon and epoxy lattice were ob
 
 Python file KMC_initialization.py takes as input 'size' and 'no_of_layers' as input and outputs 'Carbon_#x#_#.pkl' and 'Epoxies_#x#_#.pkl' files (given that coordinates_#_#.cfg and coordinates_O_#_#.cfg are also present in the same folder).
 
+## Description of scripts
+
+### KMC.py
+This script runs the A-kMC simulation with the following arguments
+- size of graphene sheets
+- no. of graphene layers
+- temperature of gas
+- pressure of gas mixture
+- temperature of graphite surface
+- no. of iterations to save files
+- maximum walltime
+
+
+
 ## How to use
 
 - Clone this github repository
@@ -33,14 +47,14 @@ Python file KMC_initialization.py takes as input 'size' and 'no_of_layers' as in
 ```bash
 $ python KMC.py 20 5 2200 10000 --save 1000000 --walltime_max 4.5
 ```
-This will generate 'Df_#Pa_#K_#_#_#.pkl' files in the Dataframes folder that will then be used for visualization and analysis.
+This will generate 'Df_10000Pa_2200K_20_5_*.pkl' files in the Dataframes folder that will then be used for visualization and analysis.
 
 To visualize these files run,
 
 ```bash
 $ python visualize.py 20 5 2200 10000 --center 170
 ```
-This will generate 'Sim_#Pa_#K_#_#_#.pkl' files in the Results folder that can be visualized in Ovito.
+This will generate 'Sim_10000Pa_2200K_20_5_*pkl' files in the Results folder that can be visualized in Ovito.
 
 To get simulation statistics run,
 
