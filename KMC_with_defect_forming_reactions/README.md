@@ -3,35 +3,33 @@
 
 The model is developed using separate, interacting lattices for the carbon and oxygen sites. The carbon lattice includes all possible carbon sites in a multilayer graphene structure representative of an HOPG material. The use of separate lattices makes it possible to effectively distinguish the oxygen and carbon sites and allow them to communicate throughout the simulation as various chemical interactions are tracked. 
 
-## Python packages
+## Required python packages
 - NumPy
 - Pandas
 - Cantera
 - Matplotlib
+- Sys
 
-First run KMC_initialization.py to get the 'Carbon_#x#_#.pkl' and 'Epoxies_#x#_#.pkl'
+## Required data
 
-Next run KMC.py:
+Carbon_#x#_#.pkl: Dataframes containing necessary lists related to carbon lattice sites
+Epoxies_#x#_#.pkl: Dataframes containing necessary lists related to epoxy lattice sites
+coordinates_#_#.cfg: File containing indices and coordinates of carbon lattice sites 
+coordinates_O_#_#.cfg: File containing indices and coordinates of epoxy lattice sites 
 
-This script is set to run at:
-Gas and surface temperature: 1500K (Line 834-835)
-Stagnation pressure: 10000 Pa (Line 850)
-Mole fraciton of atomic oxygen: 5.68167898e-06 (Obtained from NASA CEA database)
-Mole Fraction of molecular oxygen: 1.93874074e-01 (Obtained from NASA CEA database)
-Partial pressure of atomic oxygen = Stagnation pressure * Mole fraciton of atomic oxygen (Line 851)
-Partial pressure of molecular oxygen = Stagnation pressure * Mole fraciton of molecular oxygen (Line 852)
+coordinates_#_#.cfg & coordinates_O_#_#.cfg for carbon and epoxy lattice were obtined as dump files from LAMMPS. 'in.carbon' & 'in.epoxy' files can generate these files for a given size and thickness of graphite. 
 
-Before running the script, set initial parameters in lines 653-654
-Line 653: size of graphene sheets (as set in KMC_initialization.py)
-Line 737: number of graphene layers
+Python file KMC_initialization.py takes as input 'size' and 'no_of_layers' as input and outputs 'Carbon_#x#_#.pkl' and 'Epoxies_#x#_#.pkl' files (given that coordinates_#_#.cfg and coordinates_O_#_#.cfg are also present in the same folder).
 
-Next run write_to_files.py:
+## How to use
 
-Before running the script, set initial parameters in lines 13-16
-Line 13: [List of all sizes you want to run]
-Line 14: Number of layers of graphene for all sizes
-Line 15: [List of final timestep saved for respective size]
-Line 16: [List of total number of carbon atoms for respective size]
+- Ensure that 'Carbon_#x#_#.pkl', 'Epoxies_#x#_#.pkl', 'coordinates_#_#.cfg' and 'coordinates_O_#_#.cfg' are in the same folder with pyhton scripts.
+- Run KMC.py '# graphene sheet size (int)' '# no. of graphene layers (int)' 'maximum iterations (int)' 'iterations to save files (int)' 'maximum walltime (int)'
+- Run write_to_files.py to visualize simulation as LAMMPS dump files
 
-The coordinates_#_#.cfg, coordinates_O_#_#.cfg, Carbon_#x#_#.pkl and Epoxies_#x#_#.pkl files need to be in the same folder while running the scripts.
-coordinates_#_#.cfg and coordinates_O_#_#.cfg files were obtained from LAMMPS to load coordinate points for carbon and oxygen lattice points respectively.
+## Example
+
+```bash
+# This is a terminal command
+$ echo "Hello, World!"
+Hello, World!

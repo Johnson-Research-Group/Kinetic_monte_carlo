@@ -6,6 +6,7 @@ import itertools
 from itertools import chain
 import pandas as pd
 import cantera as ct
+import sys
 
 start_time = time.time()
 
@@ -1309,12 +1310,21 @@ def SBC_ep_CO(site):
 # ============================================================================================
 
 # Size unit of graphene sheets
-size = 20
+size = int(sys.argv[1])
 
 # No. of graphene layers
-no_of_layers = 5
+no_of_layers = int(sys.argv[2])
 
-# onstants
+# KMC iterations to run
+itr_final = int(sys.argv[3])
+
+# KMC iterations to save
+itr_save = int(sys.argv[4])
+
+# Maximum walltime
+walltime_max = int(sys.argv[5])
+
+# Constants
 k_b_ev = 8.6173 * 10**(-5) # Boltzmann's constant [eV K^-1]
 k_b = 1.3806*(10**(-23)) # Boltzmann's constant [J/K]
 h = 6.62607*(10**(-34)) # Planck's constant [Js]
@@ -1419,11 +1429,11 @@ for line in file[9:count]:
 
 f1.close()
 
+layernno_O = np.array([no_of_layers-1-int(math.ceil((x-1.29403)/3.4)) for x in coord_z]) 
+layernno_O = np.array(np.reshape(layernno_O, (layernno_O.shape[0],1)))
 coord_x=np.array(np.reshape(coord_x, (len(coord_x),1)))
 coord_y=np.array(np.reshape(coord_y, (len(coord_y),1)))
 coord_z=np.array(np.reshape(coord_z, (len(coord_z),1)))
-layernno_O = np.array([no_of_layers-1-int(math.ceil((x-1.29403)/3.4)) for x in coord_z]) 
-layernno_O = np.array(np.reshape(layernno_O, (len(layernno_O),1)))
 
 # Coordinate array for epoxy lattice (x coordinates, y coordinates, z coordinates, layer no.)
 coordinates_O_1 = np.copy(np.hstack((coord_x, coord_y, coord_z, layernno_O)))
@@ -1652,7 +1662,7 @@ time_step = int(offset_step) # KMC iteration
 # ==================================================================================================
 
 # Run until no more reactions are available
-while time_step<10:#cat!=-1:
+while time_step<itr_final:
 
 	time1 = time.time()
 
@@ -2326,7 +2336,7 @@ while time_step<10:#cat!=-1:
 
 	# ------------------------------------- Save simulation data -------------------------------------
 
-	if time_step%1000000==0:
+	if time_step%itr_save==0:
 		# Save every 1000000 KMC iterations
 		df1_4 = pd.DataFrame([[flag, flag_O_1, flag_O_2, flag_O_3, t,time_step, int(offset_full)+(time.time() - start_time), changing_av_ad, changing_av_ep, site_O_before, site_before, sur_av_ad, sur_av_ep, edge_C, cat,prob,cov_C,cov_ep,counter_cat]])
 		df1_4.to_pickle("./Df_%dPa_%dK_%s_%d_%d.pkl"%(P_stag,T_g,str(size), no_of_layers, time_step))
@@ -2334,11 +2344,15 @@ while time_step<10:#cat!=-1:
 	
 	if cat==-1:
 		# Save at last iteration
+		print("All carbon atoms are removed")
+		print(" ========= Final KMC Iteration = %d ==========" %time_step)
 		df1_4 = pd.DataFrame([[flag, flag_O_1, flag_O_2, flag_O_3, t,time_step, int(offset_full)+(time.time() - start_time), changing_av_ad, changing_av_ep, site_O_before, site_before, sur_av_ad, sur_av_ep, edge_C, cat,prob,cov_C,cov_ep,counter_cat]])
 		df1_4.to_pickle("./Df_%dPa_%dK_%s_%d_%d.pkl"%(P_stag,T_g,str(size), no_of_layers, time_step))
 
-	if (time.time() - start_time)/3600 >69 and checker==0:
+	if (time.time() - start_time)/3600 >walltime_max and checker==0:
 		# Save after a certain amount of simulation time has passed
+		print("Maximum walltime limit exceeded")
+		print(" ========= KMC Iteration = %d ==========" %time_step)
 		checker=1
 		df1_4 = pd.DataFrame([[flag, flag_O_1, flag_O_2, flag_O_3,t,time_step, int(offset_full)+(time.time() - start_time), changing_av_ad, changing_av_ep, site_O_before, site_before, sur_av_ad, sur_av_ep, edge_C, cat,prob,cov_C,cov_ep,counter_cat]])
 		df1_4.to_pickle("./Df_restart_%dPa_%dK_%s_%d_%d.pkl"%(P_stag,T_g,str(size), no_of_layers, time_step))
