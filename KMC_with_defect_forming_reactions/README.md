@@ -1,11 +1,15 @@
-## Atomistic kinetic Monte Carlo (A-kMC) model containting reactions that lead to the formation of defects from a pristine surface. 
-# Aug 2020 - Dec 2021
+# Atomistic kinetic Monte Carlo (A-kMC) model containting reactions that lead to the formation of defects from a pristine surface. 
+### Aug 2020 - Dec 2021
 
 The model is developed using separate, interacting lattices for the carbon and oxygen sites. The carbon lattice includes all possible carbon sites in a multilayer graphene structure representative of an HOPG material. The use of separate lattices makes it possible to effectively distinguish the oxygen and carbon sites and allow them to communicate throughout the simulation as various chemical interactions are tracked. 
 
-First run KMC_initialization.py to get the 'Carbon_#x#_#.pkl' and 'Epoxies_#x#_#.pkl'
+## Python packages
+- NumPy
+- Pandas
+- Cantera
+- Matplotlib
 
-Make sure
+First run KMC_initialization.py to get the 'Carbon_#x#_#.pkl' and 'Epoxies_#x#_#.pkl'
 
 Next run KMC.py:
 
